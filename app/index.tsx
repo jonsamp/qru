@@ -17,6 +17,11 @@ import { SavedQRCode, ParsedURL } from "../helpers/types";
 import { ColorizedURL } from "./components/ColorizedURL";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Animated, {
+  FadeOut,
+  FadeIn,
+  SlideInDown,
+} from "react-native-reanimated";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
@@ -28,11 +33,18 @@ export default function App() {
   const [scannedURL, setScannedURL] = useState<string | null>("no data");
   const [parsedURL, setParsedURL] = useState<ParsedURL | null>(null);
   const [savedURLs, setSavedURLs] = useState<SavedQRCode[]>([]);
+  const [isCardVisible, setIsCardVisible] = useState(false);
 
   useEffect(() => {
     // Load saved URLs when the app starts
     loadSavedURLs();
   }, []);
+
+  useEffect(() => {
+    if (parsedURL) {
+      setIsCardVisible(true);
+    }
+  }, [parsedURL]);
 
   const loadSavedURLs = async () => {
     try {
@@ -103,14 +115,29 @@ export default function App() {
           saveURL(result.data);
         }}
       >
-        {parsedURL && (
-          <ScrollView
+        {parsedURL && isCardVisible && (
+          <Animated.View
+            entering={SlideInDown.springify()
+              .damping(15)
+              .stiffness(80)
+              .mass(0.8)}
+            exiting={FadeOut}
             style={{
               ...styles.cardContainer,
               bottom: 8 + insets.bottom,
             }}
           >
-            <>
+            <TouchableOpacity
+              style={{
+                ...styles.closeButton,
+                top: 12,
+                right: 12,
+              }}
+              onPress={() => setIsCardVisible(false)}
+            >
+              <Ionicons name="close" size={24} color="#666" />
+            </TouchableOpacity>
+            <Animated.ScrollView>
               <View style={styles.contentContainer}>
                 {scannedURL !== "no data" && (
                   <ColorizedURL
@@ -123,27 +150,34 @@ export default function App() {
               <View style={styles.divider} />
 
               <View style={styles.contentContainer}>
-                <Text style={styles.urlComponent}>
-                  <Text style={styles.label}>Protocol:</Text>
-                  <Text style={styles.value}> {parsedURL.protocol}</Text>
-                </Text>
-                <Text style={styles.urlComponent}>
-                  <Text style={styles.label}>Host:</Text>
-                  <Text style={styles.value}> {parsedURL.host}</Text>
-                </Text>
-                <Text style={styles.urlComponent}>
-                  <Text style={styles.label}>Path:</Text>
-                  <Text style={styles.value}> {parsedURL.pathname}</Text>
-                </Text>
-                {Object.entries(parsedURL.searchParams).map(([key, value]) => (
-                  <Text key={key} style={styles.urlComponent}>
-                    <Text style={styles.label}>{key}:</Text>
-                    <Text style={styles.value}> {value}</Text>
+                {parsedURL.protocol && (
+                  <Text style={styles.urlComponent}>
+                    <Text style={styles.label}>Protocol:</Text>
+                    <Text style={styles.value}> {parsedURL.protocol}</Text>
                   </Text>
-                ))}
+                )}
+                {parsedURL.host && (
+                  <Text style={styles.urlComponent}>
+                    <Text style={styles.label}>Host:</Text>
+                    <Text style={styles.value}> {parsedURL.host}</Text>
+                  </Text>
+                )}
+                {parsedURL.pathname && parsedURL.pathname !== "/" && (
+                  <Text style={styles.urlComponent}>
+                    <Text style={styles.label}>Path:</Text>
+                    <Text style={styles.value}> {parsedURL.pathname}</Text>
+                  </Text>
+                )}
+                {Object.entries(parsedURL.searchParams).length > 0 &&
+                  Object.entries(parsedURL.searchParams).map(([key, value]) => (
+                    <Text key={key} style={styles.urlComponent}>
+                      <Text style={styles.label}>{key}:</Text>
+                      <Text style={styles.value}> {value}</Text>
+                    </Text>
+                  ))}
               </View>
-            </>
-          </ScrollView>
+            </Animated.ScrollView>
+          </Animated.View>
         )}
       </CameraView>
     </View>
@@ -184,6 +218,7 @@ const styles = StyleSheet.create({
   },
   completeUrl: {
     fontSize: 16,
+    paddingVertical: 12,
   },
   urlComponent: {
     marginBottom: 4,
@@ -205,6 +240,12 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: 8,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
+    borderRadius: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    zIndex: 10,
+    padding: 8,
     borderRadius: 20,
   },
 });
