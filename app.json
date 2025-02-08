@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "qru",
+    "name": "QRU?",
     "slug": "qru",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,10 +16,6 @@
       }
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
@@ -28,8 +24,7 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "static"
     },
     "plugins": [
       "expo-router",

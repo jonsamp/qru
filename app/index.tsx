@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
   Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,11 +16,7 @@ import { SavedQRCode, ParsedURL } from "../helpers/types";
 import { ColorizedURL } from "./components/ColorizedURL";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Animated, {
-  FadeOut,
-  FadeIn,
-  SlideInDown,
-} from "react-native-reanimated";
+import Animated, { FadeOut, SlideInDown } from "react-native-reanimated";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
@@ -121,22 +116,31 @@ export default function App() {
               .damping(15)
               .stiffness(80)
               .mass(0.8)}
-            exiting={FadeOut}
+            exiting={FadeOut.duration(200)}
             style={{
               ...styles.cardContainer,
               bottom: 8 + insets.bottom,
             }}
           >
-            <TouchableOpacity
+            <View
               style={{
-                ...styles.closeButton,
-                top: 12,
-                right: 12,
+                ...styles.contentContainer,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderBottomWidth: StyleSheet.hairlineWidth,
               }}
-              onPress={() => setIsCardVisible(false)}
             >
-              <Ionicons name="close" size={24} color="#666" />
-            </TouchableOpacity>
+              <Text style={{ fontWeight: "600", fontSize: 16 }}>
+                Scanned URL
+              </Text>
+              <TouchableOpacity
+                onPress={() => setIsCardVisible(false)}
+                activeOpacity={1}
+              >
+                <Ionicons name="close" size={24} color="#888" />
+              </TouchableOpacity>
+            </View>
             <Animated.ScrollView>
               <View style={styles.contentContainer}>
                 {scannedURL !== "no data" && (
@@ -151,29 +155,29 @@ export default function App() {
 
               <View style={styles.contentContainer}>
                 {parsedURL.protocol && (
-                  <Text style={styles.urlComponent}>
-                    <Text style={styles.label}>Protocol:</Text>
-                    <Text style={styles.value}> {parsedURL.protocol}</Text>
-                  </Text>
+                  <View style={styles.urlComponent}>
+                    <Text style={styles.label}>Protocol</Text>
+                    <Text style={styles.value}>{parsedURL.protocol}</Text>
+                  </View>
                 )}
                 {parsedURL.host && (
-                  <Text style={styles.urlComponent}>
-                    <Text style={styles.label}>Host:</Text>
-                    <Text style={styles.value}> {parsedURL.host}</Text>
-                  </Text>
+                  <View style={styles.urlComponent}>
+                    <Text style={styles.label}>Host</Text>
+                    <Text style={styles.value}>{parsedURL.host}</Text>
+                  </View>
                 )}
                 {parsedURL.pathname && parsedURL.pathname !== "/" && (
-                  <Text style={styles.urlComponent}>
-                    <Text style={styles.label}>Path:</Text>
-                    <Text style={styles.value}> {parsedURL.pathname}</Text>
-                  </Text>
+                  <View style={styles.urlComponent}>
+                    <Text style={styles.label}>Path</Text>
+                    <Text style={styles.value}>{parsedURL.pathname}</Text>
+                  </View>
                 )}
                 {Object.entries(parsedURL.searchParams).length > 0 &&
                   Object.entries(parsedURL.searchParams).map(([key, value]) => (
-                    <Text key={key} style={styles.urlComponent}>
-                      <Text style={styles.label}>{key}:</Text>
-                      <Text style={styles.value}> {value}</Text>
-                    </Text>
+                    <View key={key + value} style={styles.urlComponent}>
+                      <Text style={styles.label}>{key}</Text>
+                      <Text style={styles.value}>{value}</Text>
+                    </View>
                   ))}
               </View>
             </Animated.ScrollView>
@@ -205,7 +209,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderRadius: 20,
     margin: 16,
-    opacity: 0.9,
     maxWidth: "100%",
     maxHeight: "70%",
     position: "absolute",
@@ -218,17 +221,21 @@ const styles = StyleSheet.create({
   },
   completeUrl: {
     fontSize: 16,
-    paddingVertical: 12,
+    lineHeight: 20,
   },
   urlComponent: {
-    marginBottom: 4,
+    marginVertical: 6,
   },
   label: {
-    fontWeight: "bold",
-    color: "#666",
+    fontWeight: "600",
+    color: "#888",
+    marginRight: 4,
+    fontSize: 16,
   },
   value: {
     fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    fontSize: 14,
+    marginTop: 2,
   },
   divider: {
     height: 1,
