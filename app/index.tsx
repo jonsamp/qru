@@ -16,16 +16,18 @@ import { parseCustomURL } from "../helpers/urlParser";
 import { SavedQRCode, ParsedURL } from "../helpers/types";
 import { ColorizedURL } from "./components/ColorizedURL";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
 export default function App() {
-  const [facing, setFacing] = useState<CameraType>("back");
+  const [permission, requestPermission] = useCameraPermissions();
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+
   const [scannedURL, setScannedURL] = useState<string | null>("no data");
   const [parsedURL, setParsedURL] = useState<ParsedURL | null>(null);
   const [savedURLs, setSavedURLs] = useState<SavedQRCode[]>([]);
-  const [permission, requestPermission] = useCameraPermissions();
-  const router = useRouter();
 
   useEffect(() => {
     // Load saved URLs when the app starts
@@ -77,14 +79,14 @@ export default function App() {
     );
   }
 
-  function toggleCameraFacing() {
-    setFacing((current) => (current === "back" ? "front" : "back"));
-  }
-
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.historyIcon}
+        style={{
+          ...styles.historyIcon,
+          top: 8 + insets.top,
+          right: 32 + insets.right,
+        }}
         onPress={() => router.push("/history")}
       >
         <Ionicons name="time-outline" size={28} color="white" />
@@ -92,7 +94,6 @@ export default function App() {
 
       <CameraView
         style={styles.camera}
-        facing={facing}
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
         }}
@@ -102,14 +103,19 @@ export default function App() {
           saveURL(result.data);
         }}
       >
-        <ScrollView style={styles.scannedURLContainer}>
-          {parsedURL ? (
+        {parsedURL && (
+          <ScrollView
+            style={{
+              ...styles.cardContainer,
+              bottom: 8 + insets.bottom,
+            }}
+          >
             <>
               <View style={styles.contentContainer}>
                 {scannedURL !== "no data" && (
                   <ColorizedURL
                     url={scannedURL || ""}
-                    style={[styles.completeUrl]}
+                    style={styles.completeUrl}
                   />
                 )}
               </View>
@@ -137,12 +143,8 @@ export default function App() {
                 ))}
               </View>
             </>
-          ) : (
-            <View style={styles.contentContainer}>
-              <Text>Scan a QR code</Text>
-            </View>
-          )}
-        </ScrollView>
+          </ScrollView>
+        )}
       </CameraView>
     </View>
   );
@@ -165,51 +167,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-  scannedURLContainer: {
+  cardContainer: {
     backgroundColor: "#ffffff",
-    padding: 0,
     borderRadius: 20,
-    margin: 10,
-    opacity: 0.95,
+    margin: 16,
+    opacity: 0.9,
     maxWidth: "100%",
     maxHeight: "70%",
     position: "absolute",
-    bottom: 32,
     left: 0,
     right: 0,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.45,
-    shadowRadius: 16,
-    elevation: 16,
   },
   contentContainer: {
     paddingHorizontal: 24,
     paddingVertical: 12,
   },
-  urlTitle: {
+  completeUrl: {
     fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 12,
-  },
-  dividerTitle: {
-    marginTop: 24,
   },
   urlComponent: {
-    fontSize: 14,
-    marginBottom: 8,
-    flexWrap: "wrap",
-  },
-  completeUrl: {
-    padding: 12,
-    borderRadius: 12,
-    flexWrap: "wrap",
-    marginTop: 8,
-    fontSize: 16,
-    lineHeight: 24,
+    marginBottom: 4,
   },
   label: {
     fontWeight: "bold",
@@ -225,8 +202,6 @@ const styles = StyleSheet.create({
   },
   historyIcon: {
     position: "absolute",
-    top: 48,
-    right: 16,
     zIndex: 10,
     padding: 8,
     backgroundColor: "rgba(0, 0, 0, 0.3)",

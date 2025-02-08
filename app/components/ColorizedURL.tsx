@@ -42,16 +42,14 @@ export function ColorizedURL({ url, style }: ColorizedURLProps) {
   if (!urlParts) {
     return (
       <Pressable onPress={handlePress} style={styles.pressable}>
-        <Text selectable={true} style={[styles.text, style]}>
-          {url}
-        </Text>
+        <Text style={[styles.text, style]}>{url}</Text>
       </Pressable>
     );
   }
 
   return (
     <Pressable onPress={handlePress} style={styles.pressable}>
-      <Text selectable={true} style={[styles.text, style]}>
+      <Text style={[styles.text, style]}>
         <Text style={styles.protocol}>{urlParts.protocol}</Text>
         <Text style={styles.separator}>//</Text>
         <Text style={styles.host}>{urlParts.host}</Text>
@@ -79,32 +77,25 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   text: {
-    fontSize: 14,
-    flexWrap: "wrap",
     fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    fontWeight: "500",
   },
   protocol: {
-    color: "#FF3B30", // Red
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    color: "#FF3B30",
   },
   host: {
-    color: "#007AFF", // Blue
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    color: "#007AFF",
   },
   path: {
-    color: "#32C759", // Green
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    color: "#32C759",
   },
   paramKey: {
-    color: "#AF52DE", // Purple
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    color: "#AF52DE",
   },
   paramValue: {
-    color: "#FF9500", // Orange
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    color: "#FF9500",
   },
   separator: {
-    color: "#8E8E93", // Gray
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+    color: "#8E8E93",
   },
 });
