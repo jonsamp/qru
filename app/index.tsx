@@ -8,11 +8,14 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { parseCustomURL } from "../helpers/urlParser";
 import { SavedQRCode, ParsedURL } from "../helpers/types";
+import { ColorizedURL } from "./components/ColorizedURL";
+import { Ionicons } from "@expo/vector-icons";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
@@ -80,6 +83,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.historyIcon}
+        onPress={() => router.push("/history")}
+      >
+        <Ionicons name="time-outline" size={28} color="white" />
+      </TouchableOpacity>
+
       <CameraView
         style={styles.camera}
         facing={facing}
@@ -95,53 +105,42 @@ export default function App() {
         <ScrollView style={styles.scannedURLContainer}>
           {parsedURL ? (
             <>
-              <Text style={styles.urlTitle}>Complete URL:</Text>
-              <Text
-                style={[styles.urlComponent, styles.completeUrl]}
-                numberOfLines={0}
-              >
-                {scannedURL}
-              </Text>
+              <View style={styles.contentContainer}>
+                {scannedURL !== "no data" && (
+                  <ColorizedURL
+                    url={scannedURL || ""}
+                    style={[styles.completeUrl]}
+                  />
+                )}
+              </View>
 
-              <Text style={[styles.urlTitle, styles.dividerTitle]}>
-                URL Components:
-              </Text>
               <View style={styles.divider} />
 
-              <Text style={styles.urlComponent}>
-                <Text style={styles.label}>Protocol:</Text> {parsedURL.protocol}
-              </Text>
-              <Text style={styles.urlComponent}>
-                <Text style={styles.label}>Host:</Text> {parsedURL.host}
-              </Text>
-              <Text style={styles.urlComponent}>
-                <Text style={styles.label}>Path:</Text> {parsedURL.pathname}
-              </Text>
-              {Object.entries(parsedURL.searchParams).map(([key, value]) => (
-                <Text key={key} style={styles.urlComponent}>
-                  <Text style={styles.label}>{key}:</Text> {value}
+              <View style={styles.contentContainer}>
+                <Text style={styles.urlComponent}>
+                  <Text style={styles.label}>Protocol:</Text>
+                  <Text style={styles.value}> {parsedURL.protocol}</Text>
                 </Text>
-              ))}
-
-              <TouchableOpacity
-                style={styles.historyButton}
-                onPress={() => router.push("/history")}
-              >
-                <Text style={styles.historyButtonText}>
-                  View All Scanned URLs
+                <Text style={styles.urlComponent}>
+                  <Text style={styles.label}>Host:</Text>
+                  <Text style={styles.value}> {parsedURL.host}</Text>
                 </Text>
-              </TouchableOpacity>
+                <Text style={styles.urlComponent}>
+                  <Text style={styles.label}>Path:</Text>
+                  <Text style={styles.value}> {parsedURL.pathname}</Text>
+                </Text>
+                {Object.entries(parsedURL.searchParams).map(([key, value]) => (
+                  <Text key={key} style={styles.urlComponent}>
+                    <Text style={styles.label}>{key}:</Text>
+                    <Text style={styles.value}> {value}</Text>
+                  </Text>
+                ))}
+              </View>
             </>
           ) : (
-            <>
+            <View style={styles.contentContainer}>
               <Text>Scan a QR code</Text>
-              <TouchableOpacity
-                style={[styles.historyButton, styles.historyButtonEmpty]}
-                onPress={() => router.push("/history")}
-              >
-                <Text style={styles.historyButtonText}>View History</Text>
-              </TouchableOpacity>
-            </>
+            </View>
           )}
         </ScrollView>
       </CameraView>
@@ -168,58 +167,69 @@ const styles = StyleSheet.create({
   },
   scannedURLContainer: {
     backgroundColor: "#ffffff",
-    padding: 15,
-    borderRadius: 10,
+    padding: 0,
+    borderRadius: 20,
     margin: 10,
-    opacity: 0.9,
+    opacity: 0.95,
     maxWidth: "100%",
     maxHeight: "70%",
     position: "absolute",
     bottom: 32,
     left: 0,
     right: 0,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    elevation: 16,
+  },
+  contentContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
   },
   urlTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   dividerTitle: {
-    marginTop: 15,
+    marginTop: 24,
   },
   urlComponent: {
     fontSize: 14,
-    marginBottom: 4,
+    marginBottom: 8,
     flexWrap: "wrap",
   },
   completeUrl: {
-    padding: 8,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 5,
+    padding: 12,
+    borderRadius: 12,
     flexWrap: "wrap",
+    marginTop: 8,
+    fontSize: 16,
+    lineHeight: 24,
   },
   label: {
     fontWeight: "bold",
     color: "#666",
   },
+  value: {
+    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
+  },
   divider: {
     height: 1,
     backgroundColor: "#ddd",
-    marginVertical: 8,
+    width: "100%",
   },
-  historyButton: {
-    backgroundColor: "#007AFF",
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 20,
-    alignItems: "center",
-  },
-  historyButtonEmpty: {
-    marginTop: 40,
-  },
-  historyButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+  historyIcon: {
+    position: "absolute",
+    top: 48,
+    right: 16,
+    zIndex: 10,
+    padding: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    borderRadius: 20,
   },
 });

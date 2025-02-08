@@ -23,7 +23,8 @@
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.jonsamp.qru"
     },
     "web": {
       "bundler": "metro",
@@ -64,6 +65,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/6be970d1-0dae-48d5-83c8-d146a03d0095"
-    }
+    },
+    "owner": "jonsamp"
   }
 }

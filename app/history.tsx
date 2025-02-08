@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SavedQRCode } from "../helpers/types";
+import { ColorizedURL } from "./components/ColorizedURL";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
@@ -45,7 +46,7 @@ export default function HistoryScreen() {
 
   const renderItem = ({ item }: { item: SavedQRCode }) => (
     <View style={styles.urlItem}>
-      <Text style={styles.urlText}>{item.url}</Text>
+      <ColorizedURL url={item.url} style={styles.urlText} />
       <Text style={styles.timestampText}>{formatDate(item.timestamp)}</Text>
     </View>
   );
