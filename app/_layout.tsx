@@ -6,13 +6,14 @@ export default function Layout() {
       <Stack.Screen
         name="index"
         options={{
+          title: "Scanner",
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="history"
         options={{
-          title: "Scan History",
+          title: "Scan history",
           headerShown: true,
         }}
       />

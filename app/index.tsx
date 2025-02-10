@@ -13,10 +13,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { parseCustomURL } from "../helpers/urlParser";
 import { SavedQRCode, ParsedURL } from "../helpers/types";
-import { ColorizedURL } from "./components/ColorizedURL";
+import { ColorizedURL } from "../components/ColorizedURL";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, { FadeOut, SlideInDown } from "react-native-reanimated";
+import WeNeedPermissions from "@/components/WeNeedPermissions";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
@@ -71,19 +72,19 @@ export default function App() {
 
   if (!permission) {
     // Camera permissions are still loading.
-    return <View />;
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#000",
+        }}
+      />
+    );
   }
 
   if (!permission.granted) {
     // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>
-          We need your permission to show the camera
-        </Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
+    return <WeNeedPermissions requestPermission={requestPermission} />;
   }
 
   return (
@@ -92,7 +93,10 @@ export default function App() {
         style={{
           ...styles.historyIcon,
           top: 8 + insets.top,
-          right: 32 + insets.right,
+          right: Platform.select({
+            ios: 20 + insets.right,
+            android: 8 + insets.right,
+          }),
         }}
         onPress={() => router.push("/history")}
       >
@@ -129,10 +133,11 @@ export default function App() {
                 justifyContent: "space-between",
                 alignItems: "center",
                 borderBottomWidth: StyleSheet.hairlineWidth,
+                borderBottomColor: "#888",
               }}
             >
               <Text style={{ fontWeight: "600", fontSize: 16 }}>
-                Scanned URL
+                Scanned data
               </Text>
               <TouchableOpacity
                 onPress={() => setIsCardVisible(false)}
@@ -151,35 +156,61 @@ export default function App() {
                 )}
               </View>
 
-              <View style={styles.divider} />
+              {((parsedURL.protocol && parsedURL.protocol !== "invalid") ||
+                (parsedURL.host && parsedURL.host !== "invalid") ||
+                (parsedURL.pathname &&
+                  parsedURL.pathname !== "/" &&
+                  parsedURL.pathname !== "invalid") ||
+                Object.entries(parsedURL.searchParams).some(
+                  ([_, value]) => value && value !== "invalid"
+                )) && (
+                <>
+                  <View style={styles.divider} />
 
-              <View style={styles.contentContainer}>
-                {parsedURL.protocol && (
-                  <View style={styles.urlComponent}>
-                    <Text style={styles.label}>Protocol</Text>
-                    <Text style={styles.value}>{parsedURL.protocol}</Text>
+                  <View style={styles.contentContainer}>
+                    {parsedURL.protocol &&
+                      parsedURL.protocol !== ":" &&
+                      parsedURL.protocol !== "invalid" && (
+                        <View style={styles.urlComponent}>
+                          <Text style={styles.label}>Protocol</Text>
+                          <Text style={styles.value}>{parsedURL.protocol}</Text>
+                        </View>
+                      )}
+                    {parsedURL.host &&
+                      parsedURL.host !== "null" &&
+                      parsedURL.host !== "undefined" &&
+                      parsedURL.host !== "invalid" && (
+                        <View style={styles.urlComponent}>
+                          <Text style={styles.label}>Host</Text>
+                          <Text style={styles.value}>{parsedURL.host}</Text>
+                        </View>
+                      )}
+                    {parsedURL.pathname &&
+                      parsedURL.pathname !== "/" &&
+                      parsedURL.pathname !== "null" &&
+                      parsedURL.pathname !== "undefined" &&
+                      parsedURL.pathname !== "invalid" && (
+                        <View style={styles.urlComponent}>
+                          <Text style={styles.label}>Path</Text>
+                          <Text style={styles.value}>{parsedURL.pathname}</Text>
+                        </View>
+                      )}
+                    {Object.entries(parsedURL.searchParams).length > 0 &&
+                      Object.entries(parsedURL.searchParams).map(
+                        ([key, value]) =>
+                          value &&
+                          value !== "null" &&
+                          value !== "undefined" &&
+                          value !== "invalid" && (
+                            <View key={key + value} style={styles.urlComponent}>
+                              <Text style={styles.label}>{key}</Text>
+                              <Text style={styles.value}>{value}</Text>
+                            </View>
+                          )
+                      )}
                   </View>
-                )}
-                {parsedURL.host && (
-                  <View style={styles.urlComponent}>
-                    <Text style={styles.label}>Host</Text>
-                    <Text style={styles.value}>{parsedURL.host}</Text>
-                  </View>
-                )}
-                {parsedURL.pathname && parsedURL.pathname !== "/" && (
-                  <View style={styles.urlComponent}>
-                    <Text style={styles.label}>Path</Text>
-                    <Text style={styles.value}>{parsedURL.pathname}</Text>
-                  </View>
-                )}
-                {Object.entries(parsedURL.searchParams).length > 0 &&
-                  Object.entries(parsedURL.searchParams).map(([key, value]) => (
-                    <View key={key + value} style={styles.urlComponent}>
-                      <Text style={styles.label}>{key}</Text>
-                      <Text style={styles.value}>{value}</Text>
-                    </View>
-                  ))}
-              </View>
+                </>
+              )}
             </Animated.ScrollView>
           </Animated.View>
         )}
@@ -207,6 +238,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     backgroundColor: "#ffffff",
+    opacity: 0.9,
     borderRadius: 20,
     margin: 16,
     maxWidth: "100%",
@@ -222,6 +254,8 @@ const styles = StyleSheet.create({
   completeUrl: {
     fontSize: 16,
     lineHeight: 20,
+    paddingVertical: 8,
+    fontWeight: "bold",
   },
   urlComponent: {
     marginVertical: 6,
@@ -246,8 +280,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 10,
     padding: 8,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
-    borderRadius: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    borderRadius: 100,
   },
   closeButton: {
     position: "absolute",

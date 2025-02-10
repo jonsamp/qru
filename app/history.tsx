@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SavedQRCode } from "../helpers/types";
-import { ColorizedURL } from "./components/ColorizedURL";
+import { ColorizedURL } from "../components/ColorizedURL";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
@@ -27,15 +27,6 @@ export default function HistoryScreen() {
       }
     } catch (error) {
       console.error("Error loading saved URLs:", error);
-    }
-  };
-
-  const clearHistory = async () => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-      setSavedURLs([]);
-    } catch (error) {
-      console.error("Error clearing history:", error);
     }
   };
 
@@ -74,12 +65,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   listContent: {
-    padding: 16,
+    paddingVertical: 16,
   },
   urlItem: {
-    padding: 16,
-    backgroundColor: "#f8f9fa",
-    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
   urlText: {
     fontSize: 14,
@@ -93,7 +83,8 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   separator: {
-    height: 12,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: "#888",
   },
   emptyText: {
     textAlign: "center",

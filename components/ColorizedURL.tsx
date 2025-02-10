@@ -11,7 +11,7 @@ export function ColorizedURL({ url, style }: ColorizedURLProps) {
   const handlePress = async () => {
     try {
       await Clipboard.setStringAsync(url);
-      Alert.alert("Copied!", "URL copied to clipboard");
+      Alert.alert("Copied!", "Copied to clipboard");
     } catch (error) {
       console.error("Failed to copy:", error);
       Alert.alert("Error", "Failed to copy URL");
