@@ -2,7 +2,7 @@ name: Publish preview update
 
 on:
   push:
-    branches: ["*", "!main"]
+    branches: ["*"]
 
 jobs:
   publish_preview_update:
