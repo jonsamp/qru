@@ -3,14 +3,15 @@ import { ExpoConfig } from "expo/config";
 const isProduction = process.env.EAS_BUILD_PROFILE === "production";
 
 const config: ExpoConfig = {
+  version: "1.0.1",
   name: "QRU?",
   slug: "qru",
-  version: "1.0.1",
   orientation: "portrait",
+  platforms: ["ios", "android"],
   icon: isProduction
     ? "./assets/images/icon.png"
     : "./assets/images/icon-dev.png",
-  scheme: "myapp",
+  scheme: "qru",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   ios: {
@@ -53,7 +54,7 @@ const config: ExpoConfig = {
     [
       "expo-camera",
       {
-        cameraPermission: "Allow qru to access your camera",
+        cameraPermission: "Allow QRU to access your camera",
       },
     ],
   ],
