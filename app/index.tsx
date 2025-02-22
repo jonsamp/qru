@@ -22,7 +22,7 @@ import WeNeedPermissions from "@/scenes/WaitingForPermissionsScene";
 const STORAGE_KEY = "@qru_scanned_urls";
 
 export default function Index() {
-  const [permission, requestPermission] = useCameraPermissions();
+  const [permission, requestPermission, getPermission] = useCameraPermissions();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -84,7 +84,12 @@ export default function Index() {
 
   if (!permission.granted) {
     // Camera permissions are not granted yet.
-    return <WeNeedPermissions requestPermission={requestPermission} />;
+    return (
+      <WeNeedPermissions
+        requestPermission={requestPermission}
+        getPermission={getPermission}
+      />
+    );
   }
 
   return (
