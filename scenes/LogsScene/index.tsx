@@ -50,7 +50,7 @@ export default function LogsScene() {
               SCAN LOG
             </Text>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => router.push("/about")}
             className="z-10 items-center"
           >
@@ -62,7 +62,8 @@ export default function LogsScene() {
             <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
               About
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <View style={{ width: 36 }} />
         </View>
       </View>
       <ScrollView className="flex-1">
