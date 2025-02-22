@@ -5,12 +5,10 @@ import {
   Dimensions,
   Linking,
 } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
-import { useEffect, useState } from "react";
+import Animated from "react-native-reanimated";
+import { useEffect, useState, useMemo } from "react";
 import { PermissionResponse, PermissionStatus } from "expo-camera";
+import { useBootSequence } from "./useBootSequence";
 
 export default function WeNeedPermissions(props: {
   requestPermission: () => Promise<PermissionResponse>;
@@ -49,51 +47,27 @@ export default function WeNeedPermissions(props: {
     return messageWithoutPeriods + ".".repeat(numPeriods) + status;
   }
 
-  const bootingMessages = [
-    "> BOOT SEQUENCE INITIATED",
-    formatMessage("Verifying system integrity", "OK"),
-    formatMessage("Loading core modules", "OK"),
-    formatMessage("Initializing memory banks", "OK"),
-    formatMessage("Running diagnostics", "OK"),
-    formatMessage("Scanning I/O ports", "OK"),
-    formatMessage("Starting optical systems", "OK"),
-    formatMessage(
-      "Getting camera permission",
-      cameraPermission !== PermissionStatus.UNDETERMINED
-        ? cameraPermission?.toUpperCase() ?? "UNDETERMINED"
-        : "PENDING"
-    ),
-  ];
+  const bootingMessages = useMemo(
+    () => [
+      "> BOOT SEQUENCE INITIATED",
+      formatMessage("Verifying system integrity", "OK"),
+      formatMessage("Loading core modules", "OK"),
+      formatMessage("Initializing memory banks", "OK"),
+      formatMessage("Running diagnostics", "OK"),
+      formatMessage("Scanning I/O ports", "OK"),
+      formatMessage("Starting optical systems", "OK"),
+      formatMessage(
+        "Getting camera permission",
+        cameraPermission !== PermissionStatus.UNDETERMINED
+          ? cameraPermission?.toUpperCase() ?? "UNDETERMINED"
+          : "PENDING"
+      ),
+    ],
+    [cameraPermission]
+  );
 
-  const opacities = bootingMessages.map(() => useSharedValue(0));
-  const deniedOpacity = useSharedValue(0);
-  const buttonOpacity = useSharedValue(0);
-
-  useEffect(() => {
-    bootingMessages.forEach((_, index) => {
-      setTimeout(() => {
-        opacities[index].value = 1;
-
-        // Show button after last message appears
-        if (index === bootingMessages.length - 1) {
-          setTimeout(() => {
-            deniedOpacity.value = 1;
-          }, 200);
-          setTimeout(() => {
-            buttonOpacity.value = 1;
-          }, 400); // Small extra delay after last message
-        }
-      }, 100 * (index + 1));
-    });
-  }, []);
-
-  const buttonStyle = useAnimatedStyle(() => ({
-    opacity: buttonOpacity.value,
-  }));
-
-  const deniedStyle = useAnimatedStyle(() => ({
-    opacity: deniedOpacity.value,
-  }));
+  const { messageStyles, buttonStyle, deniedStyle, pulseStyle } =
+    useBootSequence(bootingMessages);
 
   return (
     <View className="flex-1 bg-black p-safe">
@@ -102,21 +76,15 @@ export default function WeNeedPermissions(props: {
           <Animated.Text className="text-white text-md font-[JetBrainsMonoNL-Bold]">
             &gt; WELCOME TO QRU
           </Animated.Text>
-          {bootingMessages.map((message, index) => {
-            const animatedStyle = useAnimatedStyle(() => ({
-              opacity: opacities[index].value,
-            }));
-
-            return (
-              <Animated.Text
-                key={index}
-                className="text-white text-md font-[JetBrainsMonoNL-Regular]"
-                style={animatedStyle}
-              >
-                {message}
-              </Animated.Text>
-            );
-          })}
+          {bootingMessages.map((message, index) => (
+            <Animated.Text
+              key={index}
+              className="text-white text-md font-[JetBrainsMonoNL-Regular]"
+              style={messageStyles[index]}
+            >
+              {message}
+            </Animated.Text>
+          ))}
           {cameraPermission === PermissionStatus.UNDETERMINED && (
             <Animated.View style={buttonStyle}>
               <TouchableOpacity
@@ -131,7 +99,10 @@ export default function WeNeedPermissions(props: {
           )}
           {cameraPermission === PermissionStatus.DENIED && (
             <Animated.View style={deniedStyle}>
-              <Animated.Text className="text-red-400 text-md font-[JetBrainsMonoNL-Regular]">
+              <Animated.Text
+                className="text-red-400 text-md font-[JetBrainsMonoNL-Regular]"
+                style={pulseStyle}
+              >
                 &gt; Camera access denied. Grant camera access in Settings to
                 continue.
               </Animated.Text>
