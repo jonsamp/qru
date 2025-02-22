@@ -71,7 +71,7 @@ export default function QRScannerScene() {
             <View>
               <TouchableOpacity
                 className="bg-black px-4 py-1.5 items-center justify-center"
-                onPress={() => router.push("/history")}
+                onPress={() => router.push("/logs")}
               >
                 <Image
                   source={logsIcon}

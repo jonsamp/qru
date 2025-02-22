@@ -53,7 +53,7 @@ export function ReadyToScan() {
   return (
     <View className="items-center">
       <View>
-        <Text className="text-white font-[JetBrainsMonoNL-Bold] text-base pb-2">
+        <Text className="text-white font-[JetBrainsMonoNL-Bold] text-base pb-1">
           READY TO SCAN
         </Text>
         <View className="flex-row items-center gap-[1px]">

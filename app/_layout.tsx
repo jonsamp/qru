@@ -12,10 +12,10 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="history"
+        name="logs"
         options={{
-          title: "Scan history",
-          headerShown: true,
+          title: "Logs",
+          headerShown: false,
         }}
       />
     </Stack>
