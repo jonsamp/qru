@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { useState } from "react";
 import {
   Button,
@@ -17,16 +17,16 @@ import { ColorizedURL } from "../components/ColorizedURL";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, { FadeOut, SlideInDown } from "react-native-reanimated";
-import WeNeedPermissions from "@/components/WeNeedPermissions";
+import WeNeedPermissions from "@/scenes/WaitingForPermissionsScene";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
-export default function App() {
+export default function Index() {
   const [permission, requestPermission] = useCameraPermissions();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const [scannedURL, setScannedURL] = useState<string | null>("no data");
+  const [scannedURL, setScannedURL] = useState<string | null>(null);
   const [parsedURL, setParsedURL] = useState<ParsedURL | null>(null);
   const [savedURLs, setSavedURLs] = useState<SavedQRCode[]>([]);
   const [isCardVisible, setIsCardVisible] = useState(false);

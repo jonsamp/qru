@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SavedQRCode } from "../helpers/types";
 import { ColorizedURL } from "../components/ColorizedURL";
 
 const STORAGE_KEY = "@qru_scanned_urls";
 
-export default function HistoryScreen() {
+export default function History() {
   const [savedURLs, setSavedURLs] = useState<SavedQRCode[]>([]);
 
   useEffect(() => {

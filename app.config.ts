@@ -61,9 +61,9 @@ const config: ExpoConfig = {
       "expo-font",
       {
         fonts: [
-          require("./assets/fonts/JetBrainsMono-Regular.ttf"),
-          require("./assets/fonts/JetBrainsMono-Bold.ttf"),
-          require("./assets/fonts/JetBrainsMono-Italic.ttf"),
+          "./assets/fonts/JetBrainsMono-Regular.ttf",
+          "./assets/fonts/JetBrainsMono-Bold.ttf",
+          "./assets/fonts/JetBrainsMono-Italic.ttf",
         ],
       },
     ],
