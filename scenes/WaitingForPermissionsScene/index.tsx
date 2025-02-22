@@ -1,11 +1,7 @@
-import { View, TouchableOpacity, ScrollView } from "react-native";
+import { View, TouchableOpacity, ScrollView, Dimensions } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withDelay,
-  withTiming,
-  withSequence,
-  runOnJS,
 } from "react-native-reanimated";
 import { useEffect } from "react";
 
@@ -13,15 +9,27 @@ export default function WeNeedPermissions(props: {
   requestPermission: () => void;
 }) {
   const { requestPermission } = props;
+  const screenWidth = Dimensions.get("window").width;
+  const CHAR_WIDTH = 8.3404255319;
+  const HORIZONTAL_PADDING = 48;
+  const maxChars = Math.floor((screenWidth - HORIZONTAL_PADDING) / CHAR_WIDTH);
+
+  function formatMessage(message: string, status: string) {
+    const prefix = "> ";
+    const messageWithoutPeriods = prefix + message;
+    const numPeriods = maxChars - messageWithoutPeriods.length - status.length;
+    return messageWithoutPeriods + ".".repeat(numPeriods) + status;
+  }
+
   const bootingMessages = [
     "> BOOT SEQUENCE INITIATED",
-    "> Verifying system integrity.................OK",
-    "> Loading core modules.......................OK",
-    "> Initializing memory banks..................OK",
-    "> Running diagnostics........................OK",
-    "> Scanning I/O ports.........................OK",
-    "> Starting optical systems...................OK",
-    "> Requesting camera access..............PENDING",
+    formatMessage("Verifying system integrity", "OK"),
+    formatMessage("Loading core modules", "OK"),
+    formatMessage("Initializing memory banks", "OK"),
+    formatMessage("Running diagnostics", "OK"),
+    formatMessage("Scanning I/O ports", "OK"),
+    formatMessage("Starting optical systems", "OK"),
+    formatMessage("Requesting camera access", "PENDING"),
   ];
 
   const opacities = bootingMessages.map(() => useSharedValue(0));
