@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, { SlideInDown, FadeOut } from "react-native-reanimated";
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { ParsedURL } from "../../utils/types";
 
@@ -18,19 +18,19 @@ export function ScannedData({
 }: ScannedDataProps) {
   return (
     <Animated.View
-      entering={SlideInDown.springify().damping(15).stiffness(80).mass(0.8)}
-      exiting={FadeOut.duration(200)}
+      entering={SlideInDown.duration(400)}
+      exiting={SlideOutDown.duration(400)}
       className="absolute z-10 pb-safe bottom-0 left-0 right-0 bg-black max-h-[60%]"
     >
-      <View className="flex-row justify-between items-center px-6 py-4 border-b border-gray-600">
-        <Text className="text-lg font-[JetBrainsMonoNL-Bold] text-white">
-          Scanned data
+      <View className="flex-row justify-between items-center px-6 py-4 border-b border-gray-700">
+        <Text className="text-base font-[JetBrainsMonoNL-Bold] text-white">
+          SCANNED DATA
         </Text>
         <TouchableOpacity onPress={onClose} activeOpacity={1}>
-          <Ionicons name="close" size={24} color="#888" />
+          <Ionicons name="close" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>
-      <Animated.ScrollView>
+      <Animated.ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
         <View className="px-6 py-4">
           {scannedURL !== "no data" && (
             <ColorizedURL
@@ -67,7 +67,7 @@ export function ScannedData({
                 parsedURL.host !== "undefined" &&
                 parsedURL.host !== "invalid" && (
                   <View>
-                    <Text className="text-sm text-gray-400 mb-1 font-[JetBrainsMonoNL-Regular]">
+                    <Text className="text-base text-gray-400 mb-1 font-[JetBrainsMonoNL-Regular]">
                       Host
                     </Text>
                     <Text className="text-base text-white font-[JetBrainsMonoNL-Regular]">

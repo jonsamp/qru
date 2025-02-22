@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { CameraView } from "expo-camera";
 import { parseCustomURL } from "../../utils/urlParser";
@@ -15,13 +7,33 @@ import { saveURL } from "../../utils/storage";
 import { ParsedURL } from "../../utils/types";
 import { ReadyToScan } from "./ReadyToScan";
 import { ScannedData } from "./ScannedData";
+import { Image } from "expo-image";
+
+const logsIcon = `data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="4.19531" y="5.09766" width="15.6094" height="2.5" fill="white"/>
+<rect x="4.19531" y="10.4668" width="15.6094" height="2.5" fill="white"/>
+<rect x="4.19531" y="15.8359" width="10.3789" height="2.5" fill="white"/>
+</svg>`;
+
+const qrIcon = `data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="10.918" y="4.60156" width="2.16519" height="2.16519" fill="white"/>
+<rect x="10.918" y="7.84961" width="2.16519" height="2.16519" fill="white"/>
+<rect x="10.918" y="13.9863" width="2.16519" height="2.16519" fill="white"/>
+<rect x="17.7422" y="13.9863" width="2.16519" height="2.16519" fill="white"/>
+<rect x="14.4961" y="17.2324" width="2.16519" height="2.16519" fill="white"/>
+<rect x="14.4961" y="10.918" width="2.16519" height="2.16519" fill="white"/>
+<rect x="4.08984" y="10.918" width="2.16519" height="2.16519" fill="white"/>
+<rect x="7.33984" y="10.918" width="2.16519" height="2.16519" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.50282 4.60156H4.08984V10.0145H9.50282V4.60156ZM7.90853 6.25506H5.74334V8.42025H7.90853V6.25506Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.50282 13.9844H4.08984V19.3974H9.50282V13.9844ZM7.90853 15.6379H5.74334V17.8031H7.90853V15.6379Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19.9052 4.60156H14.4922V10.0145H19.9052V4.60156ZM18.3109 6.25506H16.1457V8.42025H18.3109V6.25506Z" fill="white"/>
+</svg>`;
 
 interface BarcodeResult {
   data: string;
 }
 
 export default function QRScannerScene() {
-  const insets = useSafeAreaInsets();
   const router = useRouter();
   const [scannedURL, setScannedURL] = useState<string | null>(null);
   const [parsedURL, setParsedURL] = useState<ParsedURL | null>(null);
@@ -29,23 +41,6 @@ export default function QRScannerScene() {
 
   return (
     <View className="flex-1 bg-black">
-      <TouchableOpacity
-        className="absolute z-10 bg-black px-4 py-1.5 items-center justify-center"
-        style={{
-          top: 8 + insets.top,
-          right: Platform.select({
-            ios: 20 + insets.right,
-            android: 8 + insets.right,
-          }),
-        }}
-        onPress={() => router.push("/history")}
-      >
-        <Ionicons name="time-outline" size={28} color="white" />
-        <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
-          Logs
-        </Text>
-      </TouchableOpacity>
-
       <CameraView
         style={{ flex: 1 }}
         barcodeScannerSettings={{
@@ -58,15 +53,46 @@ export default function QRScannerScene() {
           setIsCardVisible(true);
         }}
       >
-        <ReadyToScan />
-        {parsedURL && isCardVisible && (
-          <ScannedData
-            parsedURL={parsedURL}
-            scannedURL={scannedURL}
-            onClose={() => setIsCardVisible(false)}
-          />
-        )}
+        <View className="pt-safe bg-black">
+          <View className="px-6 py-2 justify-between flex-row items-center">
+            <View className="flex-row items-center gap-1.5">
+              <Image
+                source={qrIcon}
+                style={{ width: 26, height: 26 }}
+                contentFit="contain"
+              />
+              <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
+                QRU?
+              </Text>
+            </View>
+            <View className="relative -left-1">
+              <ReadyToScan />
+            </View>
+            <View>
+              <TouchableOpacity
+                className="bg-black px-4 py-1.5 items-center justify-center"
+                onPress={() => router.push("/history")}
+              >
+                <Image
+                  source={logsIcon}
+                  style={{ width: 20, height: 20 }}
+                  contentFit="contain"
+                />
+                <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
+                  Logs
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </CameraView>
+      {parsedURL && isCardVisible && (
+        <ScannedData
+          parsedURL={parsedURL}
+          scannedURL={scannedURL}
+          onClose={() => setIsCardVisible(false)}
+        />
+      )}
     </View>
   );
 }

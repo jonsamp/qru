@@ -51,8 +51,8 @@ const useLoadingAnimation = (index: number) => {
 
 export function ReadyToScan() {
   return (
-    <View className="items-center justify-end flex-1 pb-safe">
-      <View className="pb-10">
+    <View className="items-center">
+      <View>
         <Text className="text-white font-[JetBrainsMonoNL-Bold] text-base pb-2">
           READY TO SCAN
         </Text>
