@@ -78,8 +78,8 @@ export default function QRScannerScene() {
                   style={{ width: 20, height: 20 }}
                   contentFit="contain"
                 />
-                <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
-                  Logs
+                <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
+                  Log
                 </Text>
               </TouchableOpacity>
             </View>
