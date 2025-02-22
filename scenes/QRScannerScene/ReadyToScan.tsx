@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, AppState } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withRepeat,
@@ -7,42 +7,70 @@ import Animated, {
   withDelay,
   withTiming,
   useSharedValue,
+  cancelAnimation,
 } from "react-native-reanimated";
 
-const useLoadingAnimation = (index: number) => {
+const useLoadingAnimation = (visualIndex: number) => {
   const opacity = useSharedValue(0);
 
-  useEffect(() => {
-    const duration = 2000;
-    const staggerDelay = 100;
-    const fadeInDuration = 200;
-    const fadeOutDuration = 200;
-    const totalDuration = staggerDelay * 12 + duration;
-    const startDelay = index * staggerDelay;
+  const startAnimation = () => {
+    // Cancel any existing animation
+    cancelAnimation(opacity);
 
+    const staggerDelay = 200;
+    const fadeInDuration = 400;
+    const fadeOutDuration = 400;
+    const stepDuration = fadeInDuration + fadeOutDuration;
+
+    // Reset to initial state
+    opacity.value = 0.3;
+
+    // Create the animation sequence
     opacity.value = withRepeat(
       withSequence(
-        // Start at 0.3 opacity
-        withTiming(0.3, { duration: 0 }),
-        // Delay based on position
+        // Left to right
         withDelay(
-          startDelay,
-          // Fade in and out sequence
+          visualIndex * staggerDelay,
           withSequence(
             withTiming(1, { duration: fadeInDuration }),
             withTiming(0.3, { duration: fadeOutDuration })
           )
         ),
-        // Wait for the sequence to complete before restarting
+        // Wait for the rest of the bars in the first sequence
+        withTiming(0.3, { duration: (5 - visualIndex) * staggerDelay }),
+        // Right to left
         withDelay(
-          totalDuration - duration - startDelay,
-          withTiming(0.3, { duration: 0 })
-        )
+          (5 - visualIndex) * staggerDelay,
+          withSequence(
+            withTiming(1, { duration: fadeInDuration }),
+            withTiming(0.3, { duration: fadeOutDuration })
+          )
+        ),
+        // Wait for the rest of the bars in the second sequence
+        withTiming(0.3, { duration: visualIndex * staggerDelay })
       ),
       -1,
       false
     );
-  }, []);
+  };
+
+  useEffect(() => {
+    // Start initial animation
+    startAnimation();
+
+    // Handle app state changes
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        startAnimation();
+      }
+    });
+
+    // Cleanup function to cancel animation and remove listener
+    return () => {
+      cancelAnimation(opacity);
+      subscription.remove();
+    };
+  }, [visualIndex]);
 
   return useAnimatedStyle(() => ({
     opacity: opacity.value,
