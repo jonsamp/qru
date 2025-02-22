@@ -57,6 +57,16 @@ const config: ExpoConfig = {
         cameraPermission: "Allow QRU to access your camera",
       },
     ],
+    [
+      "expo-font",
+      {
+        fonts: [
+          require("./assets/fonts/JetBrainsMono-Regular.ttf"),
+          require("./assets/fonts/JetBrainsMono-Bold.ttf"),
+          require("./assets/fonts/JetBrainsMono-Italic.ttf"),
+        ],
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
