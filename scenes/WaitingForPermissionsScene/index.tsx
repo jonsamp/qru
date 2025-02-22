@@ -59,11 +59,14 @@ export default function WeNeedPermissions(props: {
     formatMessage("Starting optical systems", "OK"),
     formatMessage(
       "Getting camera permission",
-      cameraPermission?.toUpperCase() ?? "PENDING"
+      cameraPermission !== PermissionStatus.UNDETERMINED
+        ? cameraPermission?.toUpperCase() ?? "UNDETERMINED"
+        : "PENDING"
     ),
   ];
 
   const opacities = bootingMessages.map(() => useSharedValue(0));
+  const deniedOpacity = useSharedValue(0);
   const buttonOpacity = useSharedValue(0);
 
   useEffect(() => {
@@ -74,8 +77,11 @@ export default function WeNeedPermissions(props: {
         // Show button after last message appears
         if (index === bootingMessages.length - 1) {
           setTimeout(() => {
+            deniedOpacity.value = 1;
+          }, 200);
+          setTimeout(() => {
             buttonOpacity.value = 1;
-          }, 200); // Small extra delay after last message
+          }, 400); // Small extra delay after last message
         }
       }, 100 * (index + 1));
     });
@@ -83,6 +89,10 @@ export default function WeNeedPermissions(props: {
 
   const buttonStyle = useAnimatedStyle(() => ({
     opacity: buttonOpacity.value,
+  }));
+
+  const deniedStyle = useAnimatedStyle(() => ({
+    opacity: deniedOpacity.value,
   }));
 
   return (
@@ -120,21 +130,24 @@ export default function WeNeedPermissions(props: {
             </Animated.View>
           )}
           {cameraPermission === PermissionStatus.DENIED && (
-            <View>
-              <Animated.Text className="text-white text-md font-[JetBrainsMonoNL-Regular]">
-                &gt; Grant camera access in Settings to continue
+            <Animated.View style={deniedStyle}>
+              <Animated.Text className="text-red-400 text-md font-[JetBrainsMonoNL-Regular]">
+                &gt; Camera access denied. Grant camera access in Settings to
+                continue.
               </Animated.Text>
-              <Animated.View style={buttonStyle}>
-                <TouchableOpacity
-                  onPress={openSettings}
-                  className="bg-white px-6 py-3 mt-3"
-                >
-                  <Animated.Text className="text-black text-lg font-[JetBrainsMonoNL-Bold] text-center">
-                    OPEN SETTINGS
-                  </Animated.Text>
-                </TouchableOpacity>
-              </Animated.View>
-            </View>
+            </Animated.View>
+          )}
+          {cameraPermission === PermissionStatus.DENIED && (
+            <Animated.View style={buttonStyle}>
+              <TouchableOpacity
+                onPress={openSettings}
+                className="bg-white px-6 py-3 mt-3"
+              >
+                <Animated.Text className="text-black text-lg font-[JetBrainsMonoNL-Bold] text-center">
+                  OPEN SETTINGS
+                </Animated.Text>
+              </TouchableOpacity>
+            </Animated.View>
           )}
         </View>
       </ScrollView>
