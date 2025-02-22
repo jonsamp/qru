@@ -1,13 +1,14 @@
 import React from "react";
-import { Text, StyleSheet, Platform, Pressable, Alert } from "react-native";
+import { Text, Pressable, Alert } from "react-native";
 import * as Clipboard from "expo-clipboard";
 
 interface ColorizedURLProps {
   url: string;
   style?: any;
+  className?: string;
 }
 
-export function ColorizedURL({ url, style }: ColorizedURLProps) {
+export function ColorizedURL({ url, style, className }: ColorizedURLProps) {
   const handlePress = async () => {
     try {
       await Clipboard.setStringAsync(url);
@@ -41,28 +42,36 @@ export function ColorizedURL({ url, style }: ColorizedURLProps) {
 
   if (!urlParts) {
     return (
-      <Pressable onPress={handlePress} style={styles.pressable}>
-        <Text style={[styles.text, style]}>{url}</Text>
+      <Pressable onPress={handlePress} className="w-full">
+        <Text
+          className={`font-[JetBrainsMonoNL-Regular] ${className}`}
+          style={style}
+        >
+          {url}
+        </Text>
       </Pressable>
     );
   }
 
   return (
-    <Pressable onPress={handlePress} style={styles.pressable}>
-      <Text style={[styles.text, style]}>
-        <Text style={styles.protocol}>{urlParts.protocol}</Text>
-        <Text style={styles.separator}>//</Text>
-        <Text style={styles.host}>{urlParts.host}</Text>
-        <Text style={styles.path}>{urlParts.pathname}</Text>
+    <Pressable onPress={handlePress} className="w-full">
+      <Text
+        className={`font-[JetBrainsMonoNL-Regular] text-xl ${className}`}
+        style={style}
+      >
+        <Text className="text-[#FF4DB8]">{urlParts.protocol}</Text>
+        <Text className="text-[#6B7280]">//</Text>
+        <Text className="text-[#00B7FF]">{urlParts.host}</Text>
+        <Text className="text-[#4ADE80]">{urlParts.pathname}</Text>
         {urlParts.search.length > 0 && (
           <>
-            <Text style={styles.separator}>?</Text>
+            <Text className="text-[#6B7280]">?</Text>
             {urlParts.search.map(({ key, value }, index) => (
               <React.Fragment key={key + index}>
-                {index > 0 && <Text style={styles.separator}>&</Text>}
-                <Text style={styles.paramKey}>{key}</Text>
-                <Text style={styles.separator}>=</Text>
-                <Text style={styles.paramValue}>{value}</Text>
+                {index > 0 && <Text className="text-[#6B7280]">&</Text>}
+                <Text className="text-[#D8B4FE]">{key}</Text>
+                <Text className="text-[#6B7280]">=</Text>
+                <Text className="text-[#FFB84D]">{value}</Text>
               </React.Fragment>
             ))}
           </>
@@ -71,31 +80,3 @@ export function ColorizedURL({ url, style }: ColorizedURLProps) {
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  pressable: {
-    width: "100%",
-  },
-  text: {
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace" }),
-    fontWeight: "500",
-  },
-  protocol: {
-    color: "#FF3B30",
-  },
-  host: {
-    color: "#007AFF",
-  },
-  path: {
-    color: "#32C759",
-  },
-  paramKey: {
-    color: "#AF52DE",
-  },
-  paramValue: {
-    color: "#FF9500",
-  },
-  separator: {
-    color: "#8E8E93",
-  },
-});
