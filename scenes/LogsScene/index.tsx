@@ -54,24 +54,32 @@ export default function LogsScene() {
         </View>
       </View>
       <ScrollView className="flex-1">
-        <View>
-          {savedURLs.map((item, index) => (
-            <View
-              key={item.url + index}
-              className={`py-4 px-6 ${
-                index !== 0 ? "border-t border-gray-700" : ""
-              }`}
-            >
-              <ColorizedURL
-                url={item.url}
-                className="text-base font-[JetBrainsMonoNL-Regular]"
-              />
-              <Text className="text-gray-500 font-[JetBrainsMonoNL-Regular] text-sm mt-1">
-                {new Date(item.timestamp).toLocaleString()}
-              </Text>
-            </View>
-          ))}
-        </View>
+        {savedURLs.length === 0 ? (
+          <View className="flex-1 items-center justify-center py-20">
+            <Text className="text-gray-500 font-[JetBrainsMonoNL-Regular] text-base">
+              No scanned QR codes yet
+            </Text>
+          </View>
+        ) : (
+          <View>
+            {savedURLs.map((item, index) => (
+              <View
+                key={item.url + index}
+                className={`py-4 px-6 ${
+                  index !== 0 ? "border-t border-gray-700" : ""
+                }`}
+              >
+                <ColorizedURL
+                  url={item.url}
+                  className="text-base font-[JetBrainsMonoNL-Regular]"
+                />
+                <Text className="text-gray-500 font-[JetBrainsMonoNL-Regular] text-sm mt-1">
+                  {new Date(item.timestamp).toLocaleString()}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </View>
   );
