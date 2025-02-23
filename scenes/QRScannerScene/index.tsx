@@ -70,9 +70,7 @@ export default function QRScannerScene() {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View className="relative -left-1">
-              <ReadyToScan />
-            </View>
+            <View className="relative -left-1">{/* <ReadyToScan /> */}</View>
             <View>
               <TouchableOpacity
                 className="px-4 py-1.5 items-center justify-center"
