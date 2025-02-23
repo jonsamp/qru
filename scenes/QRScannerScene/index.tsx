@@ -55,22 +55,27 @@ export default function QRScannerScene() {
       >
         <View className="pt-safe bg-black">
           <View className="px-6 py-2 justify-between flex-row items-center">
-            <View className="flex-row items-center gap-1.5">
-              <Image
-                source={qrIcon}
-                style={{ width: 26, height: 26 }}
-                contentFit="contain"
-              />
-              <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
-                QRU?
-              </Text>
+            <View>
+              <TouchableOpacity
+                className="flex-row items-center gap-1.5"
+                onPress={() => router.push("/about")}
+              >
+                <Image
+                  source={qrIcon}
+                  style={{ width: 26, height: 26 }}
+                  contentFit="contain"
+                />
+                <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
+                  QRU?
+                </Text>
+              </TouchableOpacity>
             </View>
             <View className="relative -left-1">
               <ReadyToScan />
             </View>
             <View>
               <TouchableOpacity
-                className="bg-black px-4 py-1.5 items-center justify-center"
+                className="px-4 py-1.5 items-center justify-center"
                 onPress={() => router.push("/logs")}
               >
                 <Image

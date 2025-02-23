@@ -74,7 +74,7 @@ export default function WeNeedPermissions(props: {
       <ScrollView className="flex-1 pt-10">
         <View className="flex-1 px-6 gap-1">
           <Animated.Text className="text-white text-md font-[JetBrainsMonoNL-Bold]">
-            &gt; WELCOME TO QRU
+            &gt; === WELCOME TO QRU ===
           </Animated.Text>
           {bootingMessages.map((message, index) => (
             <Animated.Text

@@ -65,7 +65,7 @@ export const useBootSequence = (messages: string[]) => {
           withRepeat(
             withSequence(
               withTiming(1, { duration: 500 }),
-              withTiming(0.75, { duration: 500 })
+              withTiming(0.5, { duration: 500 })
             ),
             -1,
             true
