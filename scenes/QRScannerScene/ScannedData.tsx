@@ -35,7 +35,7 @@ export function ScannedData({
           {scannedURL !== "no data" && (
             <ColorizedURL
               url={scannedURL || ""}
-              className="text-base font-[JetBrainsMonoNL-Regular]"
+              className="text-base font-[JetBrainsMonoNL-Regular] text-white"
             />
           )}
         </View>

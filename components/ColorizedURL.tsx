@@ -44,7 +44,7 @@ export function ColorizedURL({ url, style, className }: ColorizedURLProps) {
     return (
       <Pressable onPress={handlePress} className="w-full">
         <Text
-          className={`font-[JetBrainsMonoNL-Regular] ${className}`}
+          className={`font-[JetBrainsMonoNL-Regular] text-lg text-white ${className}`}
           style={style}
         >
           {url}
