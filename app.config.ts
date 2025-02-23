@@ -16,7 +16,7 @@ const config: ExpoConfig = {
   newArchEnabled: true,
   ios: {
     supportsTablet: true,
-    bundleIdentifier: `jonsamp.qru${isProduction ? "" : "-dev"}`,
+    bundleIdentifier: `com.jonsamp.qru${isProduction ? "" : "-dev"}`,
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
     },
