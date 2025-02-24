@@ -37,6 +37,7 @@ export default function WeNeedPermissions(props: {
     useState<PermissionStatus | null>(null);
   const [visibleMessages, setVisibleMessages] = useState<string[]>([]);
   const [allMessagesDisplayed, setAllMessagesDisplayed] = useState(false);
+  const [hasShownInitialMessages, setHasShownInitialMessages] = useState(false);
   const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
   const pulseOpacity = useSharedValue(0.5);
 
@@ -96,48 +97,58 @@ export default function WeNeedPermissions(props: {
     timeoutsRef.current.forEach(clearTimeout);
     timeoutsRef.current = [];
 
-    // Reset messages when permission changes
-    setVisibleMessages([]);
-    setAllMessagesDisplayed(false);
+    // Only show the boot sequence once
+    if (!hasShownInitialMessages) {
+      setVisibleMessages([]);
+      setAllMessagesDisplayed(false);
 
-    const messages = [...bootingMessages];
+      const messages = [...bootingMessages];
 
-    // Show messages one by one
-    messages.forEach((message, index) => {
-      const timeout = setTimeout(() => {
-        setVisibleMessages((prev) => [...prev, message]);
+      // Show messages one by one
+      messages.forEach((message, index) => {
+        const timeout = setTimeout(() => {
+          setVisibleMessages((prev) => [...prev, message]);
 
-        // Add denied message after the last message if permission is denied
-        if (
-          index === messages.length - 1 &&
-          cameraPermission === PermissionStatus.DENIED
-        ) {
-          const deniedTimeout = setTimeout(() => {
-            setVisibleMessages((prev) => [
-              ...prev.slice(0, -1),
-              formatMessage("Getting camera permission", "DENIED"),
-              formatMessage(
-                "Camera access denied. Grant camera access in Settings to continue.",
-                ""
-              ),
-            ]);
+          if (index === messages.length - 1) {
+            setHasShownInitialMessages(true);
             setAllMessagesDisplayed(true);
-          }, 200);
-          timeoutsRef.current.push(deniedTimeout);
-        } else if (index === messages.length - 1) {
-          // If this is the last message and not denied, set all messages as displayed
-          setAllMessagesDisplayed(true);
-        }
-      }, 150 * (index + 1));
 
-      timeoutsRef.current.push(timeout);
-    });
+            // If permission is already denied when messages finish, show denied message
+            if (cameraPermission === PermissionStatus.DENIED) {
+              const deniedTimeout = setTimeout(() => {
+                setVisibleMessages((prev) => [
+                  ...prev.slice(0, -1),
+                  formatMessage("Getting camera permission", "DENIED"),
+                  formatMessage(
+                    "Camera access denied. Grant camera access in Settings to continue.",
+                    ""
+                  ),
+                ]);
+              }, 200);
+              timeoutsRef.current.push(deniedTimeout);
+            }
+          }
+        }, 150 * (index + 1));
+
+        timeoutsRef.current.push(timeout);
+      });
+    } else if (cameraPermission === PermissionStatus.DENIED) {
+      // If messages are already shown and permission becomes denied, just update the last messages
+      setVisibleMessages((prev) => [
+        ...prev.slice(0, -1),
+        formatMessage("Getting camera permission", "DENIED"),
+        formatMessage(
+          "Camera access denied. Grant camera access in Settings to continue.",
+          ""
+        ),
+      ]);
+    }
 
     return () => {
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
     };
-  }, [cameraPermission]);
+  }, [cameraPermission, hasShownInitialMessages]);
 
   useEffect(() => {
     if (cameraPermission === PermissionStatus.DENIED) {
