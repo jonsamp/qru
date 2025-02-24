@@ -1,14 +1,43 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { ParsedURL } from "../../utils/types";
+import * as Clipboard from "expo-clipboard";
 
 interface ScannedDataProps {
   parsedURL: ParsedURL;
   scannedURL: string | null;
   onClose: () => void;
+}
+
+function CopyableText({ label, value }: { label: string; value: string }) {
+  const handlePress = async () => {
+    try {
+      await Clipboard.setStringAsync(value);
+      const displayLabel = label.startsWith("Param: ")
+        ? label.replace("Param: ", "parameter ")
+        : label.toLowerCase();
+      Alert.alert("Copied!", `Copied ${displayLabel} to clipboard`);
+    } catch (error) {
+      console.error("Failed to copy:", error);
+      Alert.alert("Error", "Failed to copy text");
+    }
+  };
+
+  return (
+    <View>
+      <Text className="text-base text-gray-400 mb-1 font-[JetBrainsMonoNL-Regular]">
+        {label}
+      </Text>
+      <Pressable onPress={handlePress}>
+        <Text className="text-base text-white font-[JetBrainsMonoNL-Regular]">
+          {value}
+        </Text>
+      </Pressable>
+    </View>
+  );
 }
 
 export function ScannedData({
@@ -53,41 +82,20 @@ export function ScannedData({
               {parsedURL.protocol &&
                 parsedURL.protocol !== ":" &&
                 parsedURL.protocol !== "invalid" && (
-                  <View>
-                    <Text className="text-base text-gray-400 mb-1 font-[JetBrainsMonoNL-Regular]">
-                      Protocol
-                    </Text>
-                    <Text className="text-base text-white font-[JetBrainsMonoNL-Regular]">
-                      {parsedURL.protocol}
-                    </Text>
-                  </View>
+                  <CopyableText label="Protocol" value={parsedURL.protocol} />
                 )}
               {parsedURL.host &&
                 parsedURL.host !== "null" &&
                 parsedURL.host !== "undefined" &&
                 parsedURL.host !== "invalid" && (
-                  <View>
-                    <Text className="text-base text-gray-400 mb-1 font-[JetBrainsMonoNL-Regular]">
-                      Host
-                    </Text>
-                    <Text className="text-base text-white font-[JetBrainsMonoNL-Regular]">
-                      {parsedURL.host}
-                    </Text>
-                  </View>
+                  <CopyableText label="Host" value={parsedURL.host} />
                 )}
               {parsedURL.pathname &&
                 parsedURL.pathname !== "/" &&
                 parsedURL.pathname !== "null" &&
                 parsedURL.pathname !== "undefined" &&
                 parsedURL.pathname !== "invalid" && (
-                  <View>
-                    <Text className="text-base text-gray-400 mb-1 font-[JetBrainsMonoNL-Regular]">
-                      Path
-                    </Text>
-                    <Text className="text-base text-white font-[JetBrainsMonoNL-Regular]">
-                      {parsedURL.pathname}
-                    </Text>
-                  </View>
+                  <CopyableText label="Path" value={parsedURL.pathname} />
                 )}
               {Object.entries(parsedURL.searchParams).length > 0 &&
                 Object.entries(parsedURL.searchParams).map(
@@ -96,14 +104,11 @@ export function ScannedData({
                     value !== "null" &&
                     value !== "undefined" &&
                     value !== "invalid" && (
-                      <View key={key + value}>
-                        <Text className="text-base text-gray-400 mb-1 font-[JetBrainsMonoNL-Regular]">
-                          Param: {key}
-                        </Text>
-                        <Text className="text-base text-white font-[JetBrainsMonoNL-Regular]">
-                          {value}
-                        </Text>
-                      </View>
+                      <CopyableText
+                        key={key + value}
+                        label={`Param: ${key}`}
+                        value={value}
+                      />
                     )
                 )}
             </View>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { CameraView } from "expo-camera";
@@ -38,6 +38,23 @@ export default function QRScannerScene() {
   const [scannedURL, setScannedURL] = useState<string | null>(null);
   const [parsedURL, setParsedURL] = useState<ParsedURL | null>(null);
   const [isCardVisible, setIsCardVisible] = useState(true);
+  const [isCameraReady, setIsCameraReady] = useState(false);
+
+  // Reset camera state when component mounts
+  useEffect(() => {
+    setIsCameraReady(false);
+    return () => {
+      setIsCameraReady(false);
+    };
+  }, []);
+
+  const handleBarcodeScanned = (result: BarcodeResult) => {
+    if (!isCameraReady) return;
+    setScannedURL(result.data);
+    setParsedURL(parseCustomURL(result.data));
+    saveURL(result.data);
+    setIsCardVisible(true);
+  };
 
   return (
     <View className="flex-1 bg-black">
@@ -46,12 +63,9 @@ export default function QRScannerScene() {
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
         }}
-        onBarcodeScanned={(result: BarcodeResult) => {
-          setScannedURL(result.data);
-          setParsedURL(parseCustomURL(result.data));
-          saveURL(result.data);
-          setIsCardVisible(true);
-        }}
+        onBarcodeScanned={handleBarcodeScanned}
+        onCameraReady={() => setIsCameraReady(true)}
+        onMountError={() => setIsCameraReady(false)}
       >
         <View className="pt-safe bg-black">
           <View className="px-6 py-2 justify-between flex-row items-center">
