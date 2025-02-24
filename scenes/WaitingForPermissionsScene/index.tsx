@@ -74,11 +74,12 @@ export default function WeNeedPermissions(props: {
       formatMessage("Scanning I/O ports", "OK"),
       formatMessage("Starting optical systems", "OK"),
       formatMessage(
-        "Getting camera permission",
+        "Camera permission status",
         cameraPermission !== PermissionStatus.UNDETERMINED
           ? cameraPermission?.toUpperCase() ?? "UNDETERMINED"
           : "PENDING"
       ),
+      "QRU? requires camera access to scan QR codes.",
     ],
     [cameraPermission]
   );
@@ -202,7 +203,7 @@ export default function WeNeedPermissions(props: {
                     className="bg-white px-6 py-3"
                   >
                     <Text className="text-black text-lg font-[JetBrainsMonoNL-Bold] text-center">
-                      GRANT CAMERA ACCESS
+                      CONTINUE
                     </Text>
                   </TouchableOpacity>
                 </View>

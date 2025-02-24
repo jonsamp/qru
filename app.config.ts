@@ -54,7 +54,7 @@ const config: ExpoConfig = {
     [
       "expo-camera",
       {
-        cameraPermission: "Allow QRU to access your camera",
+        cameraPermission: "The camera will be used to scan QR codes.",
       },
     ],
     [
