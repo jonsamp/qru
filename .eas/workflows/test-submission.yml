@@ -1,0 +1,15 @@
+name: Test Submission
+
+jobs:
+  build_ios:
+    name: Build iOS
+    type: build
+    params:
+      platform: ios
+      profile: production
+  submit_ios_build:
+    name: Submit iOS Build
+    needs: [build_ios]
+    type: submit
+    params:
+      build_id: ${{ needs.build_ios.outputs.build_id }}
