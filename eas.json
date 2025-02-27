@@ -29,9 +29,11 @@
   },
   "submit": {
     "production": {
-      "appleId": "sampjon@gmail.com",
-      "ascAppId": "6741717337",
-      "appleTeamId": "NLUVE3B2AS"
+      "ios": {
+        "appleId": "sampjon@gmail.com",
+        "ascAppId": "6741717337",
+        "appleTeamId": "NLUVE3B2AS"
+      }
     }
   }
 }
