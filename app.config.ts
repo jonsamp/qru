@@ -3,11 +3,11 @@ import { ExpoConfig } from "expo/config";
 const isProduction = process.env.EAS_BUILD_PROFILE === "production";
 
 const config: ExpoConfig = {
-  version: "1.1.0",
+  version: "1.2.0",
   name: "QRU?",
   slug: "qru",
   orientation: "portrait",
-  platforms: ["ios", "android"],
+  platforms: ["ios", "android", "web"],
   icon: isProduction
     ? "./assets/images/icon.png"
     : "./assets/images/icon-dev.png",

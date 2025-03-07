@@ -6,7 +6,6 @@ import {
   Dimensions,
   Linking,
   Text,
-  StyleSheet,
 } from "react-native";
 import { useEffect, useState, useMemo } from "react";
 import { PermissionResponse, PermissionStatus } from "expo-camera";
@@ -17,16 +16,6 @@ import Animated, {
   withTiming,
   useSharedValue,
 } from "react-native-reanimated";
-
-const styles = StyleSheet.create({
-  pulsingText: {
-    opacity: 0.5,
-    animationName: "pulse",
-    animationDuration: "1s",
-    animationIterationCount: "infinite",
-    animationDirection: "alternate",
-  },
-});
 
 export default function WeNeedPermissions(props: {
   requestPermission: () => Promise<PermissionResponse>;
@@ -45,7 +34,7 @@ export default function WeNeedPermissions(props: {
     opacity: pulseOpacity.value,
   }));
 
-  const screenWidth = Dimensions.get("window").width;
+  const screenWidth = Math.min(Dimensions.get("window").width, 800);
   const CHAR_WIDTH = 8.3404255319;
   const HORIZONTAL_PADDING = 48;
   const maxChars = Math.floor((screenWidth - HORIZONTAL_PADDING) / CHAR_WIDTH);

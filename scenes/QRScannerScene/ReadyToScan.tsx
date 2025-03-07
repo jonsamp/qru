@@ -10,11 +10,11 @@ export function ReadyToScan() {
         <Text className="text-white font-[JetBrainsMonoNL-Bold] text-base pb-1">
           READY TO SCAN
         </Text>
-        <View className="relative -left-1.5">
+        <View>
           <Image
             source={readyToScanGif}
             style={{
-              width: 360 / 3,
+              width: 360 / 3 + 4,
               height: 2,
             }}
           />
