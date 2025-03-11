@@ -66,3 +66,16 @@ jobs:
     params:
       branch: production
       platform: ios
+  build_web:
+    name: Build web
+    steps:
+      - uses: eas/checkout
+      - uses: eas/install_node_modules
+      - name: Build web
+        run: npx expo export --platform web
+  deploy_web:
+    name: Deploy web
+    type: deploy
+    needs: [build_web]
+    params:
+      prod: true
