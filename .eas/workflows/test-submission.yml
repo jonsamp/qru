@@ -1,8 +1,8 @@
 name: Test Submission
 
 jobs:
-  submit_ios_build:
-    name: Submit iOS Build
-    type: submit
+  build_ios:
+    type: build
     params:
-      build_id: 71148dc0-5067-4792-9667-1d14e6f5c128
+      platform: ios
+      profile: production
