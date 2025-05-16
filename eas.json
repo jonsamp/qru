@@ -8,6 +8,12 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "development-tf": {
+      "developmentClient": true,
+      "env": {
+        "EAS_BUILD_PROFILE": "development"
+      }
+    },
     "development-simulator": {
       "developmentClient": true,
       "distribution": "internal",
@@ -28,6 +34,15 @@
     }
   },
   "submit": {
+    "development-tf": {
+      "android": {
+        "serviceAccountKeyPath": "./google-play-service-account.json",
+        "releaseStatus": "draft"
+      },
+      "ios": {
+        "ascAppId": "6741717337"
+      }
+    },
     "production": {
       "android": {
         "serviceAccountKeyPath": "./google-play-service-account.json",
