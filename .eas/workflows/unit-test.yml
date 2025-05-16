@@ -1,0 +1,8 @@
+name: Unit test
+
+jobs:
+  unit_test:
+    steps:
+      - uses: eas/checkout
+      - uses: eas/install_node_modules
+      - run: yarn test
