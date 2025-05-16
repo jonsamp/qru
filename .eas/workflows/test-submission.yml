@@ -1,8 +1,0 @@
-name: Test Submission
-
-jobs:
-  build_ios:
-    type: build
-    params:
-      platform: ios
-      profile: production
