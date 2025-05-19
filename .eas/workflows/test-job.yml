@@ -1,5 +1,10 @@
 name: Test job
 
+on:
+  push:
+    branches:
+      - "*"
+
 jobs:
   test_job:
     steps:
@@ -21,3 +26,6 @@ jobs:
         run: echo ${{ toJSON(steps) }}
         # step_3:{outputs:{}} step_3a:{outputs:{}} step_4:{outputs:{}} step_6:{outputs:{}} step_7:{outputs:{}}
 # [after, env, github, needs, expoApiServerURL, job, metadata, steps, always, never, success, failure, fromJSON, toJSON].
+
+# worker evals some but not all of these.
+# www evals some but not all of these.
