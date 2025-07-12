@@ -1,0 +1,8 @@
+name: Test job
+
+jobs:
+  test_job:
+    steps:
+      - uses: eas/checkout
+      - uses: eas/install_node_modules
+      - run: npx eas-cli@16.6.1 update --auto --non-interactive
