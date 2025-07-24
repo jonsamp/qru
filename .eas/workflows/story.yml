@@ -1,0 +1,41 @@
+name: Dragon and Knight Story
+
+jobs:
+  show_story_intro:
+    name: Dragon and Knight Story Intro
+    type: doc
+    params:
+      md: |
+        # The Dragon and the Knight
+
+        Once upon a time, in a land far away, a brave knight set out to face a mighty dragon.
+
+        The dragon roared, breathing fire across the valley, but the knight stood firm, shield raised high.
+
+        Now, the fate of their encounter is in your hands...
+
+  require_approval:
+    name: Should the knight and dragon become friends?
+    needs: [show_story_intro]
+    type: require-approval
+
+  happy_ending:
+    name: Friendship Ending
+    needs: [require_approval]
+    type: doc
+    params:
+      md: |
+        ## A New Friendship
+
+        The knight lowered his sword, and the dragon ceased its fire. They realized they both longed for peace. From that day on, they became the best of friends, protecting the kingdom together.
+
+  epic_battle:
+    name: Epic Battle Ending
+    after: [require_approval]
+    if: ${{ failure() }}
+    type: doc
+    params:
+      md: |
+        ## The Epic Battle
+
+        The knight charged forward, and the dragon unleashed a mighty roar. Their battle shook the mountains and echoed through the ages. In the end, both were remembered as fierce and noble adversaries.
