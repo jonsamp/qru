@@ -101,7 +101,7 @@ export default function AboutScene() {
         </View>
         <View className="px-6">
           <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
-            Runtime Version: {Updates.runtimeVersion}
+            App Version: {Updates.runtimeVersion}
           </Text>
           <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
             Update ID: {Updates.updateId ?? "Embedded"}

@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Alert, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  Pressable,
+  ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { ColorizedURL } from "../../components/ColorizedURL";
@@ -46,7 +53,7 @@ export function ScannedData({
   onClose,
 }: ScannedDataProps) {
   return (
-    <Animated.View
+    <View
       entering={SlideInDown.duration(400)}
       exiting={SlideOutDown.duration(400)}
       className="absolute z-10 pb-safe bottom-0 left-0 right-0 bg-black max-h-[60%]"
@@ -59,7 +66,7 @@ export function ScannedData({
           <Ionicons name="close" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>
-      <Animated.ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
         <View className="px-6 py-4">
           {scannedURL !== "no data" && (
             <ColorizedURL
@@ -114,7 +121,7 @@ export function ScannedData({
             </View>
           </>
         )}
-      </Animated.ScrollView>
-    </Animated.View>
+      </ScrollView>
+    </View>
   );
 }
