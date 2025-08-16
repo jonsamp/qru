@@ -35,6 +35,7 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+
 app-example
 
-mcp.json
+.cursor/mcp.json

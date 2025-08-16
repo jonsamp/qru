@@ -1,11 +1,10 @@
 name: Publish preview update
 
-on:
-  schedule:
-    - cron: "0 0 * * *" # Runs at midnight every day
-  push:
-    branches:
-      - "*"
+# Disabling while upgrading to Expo 54
+# on:
+#   push:
+#     branches:
+#       - "*"
 
 jobs:
   publish_preview_update:
