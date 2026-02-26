@@ -1,8 +1,10 @@
 import { Stack } from "expo-router";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
 
 export default function Layout() {
   return (
+    <SafeAreaProvider>
     <Stack>
       <Stack.Screen
         name="index"
@@ -27,5 +29,6 @@ export default function Layout() {
         }}
       />
     </Stack>
+    </SafeAreaProvider>
   );
 }

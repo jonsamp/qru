@@ -10,36 +10,37 @@ import { useRouter } from "expo-router";
 import { Image } from "expo-image";
 import * as Updates from "expo-updates";
 
-const backIcon = `data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="white"/>
-</svg>`;
+const backIcon =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAgMTFINy44M0wxMy40MiA1LjQxTDEyIDRMNCAxMkwxMiAyMEwxMy40MSAxOC41OUw3LjgzIDEzSDIwVjExWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=";
 
 export default function AboutScene() {
   const router = useRouter();
 
   return (
     <View className="flex-1 bg-gray-900">
-      <View className="px-6 py-4 flex-row items-center justify-between border-b border-gray-700">
-        <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
-          ABOUT
-        </Text>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="z-10 items-center"
-        >
-          <Image
-            source={backIcon}
-            style={{
-              width: 20,
-              height: 20,
-              transform: [{ rotate: "-90deg" }],
-            }}
-            contentFit="contain"
-          />
-          <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
-            Dismiss
+      <View className="pt-safe">
+        <View className="px-6 py-4 flex-row items-center justify-between border-b border-gray-700">
+          <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
+            ABOUT
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="z-10 items-center"
+          >
+            <Image
+              source={backIcon}
+              style={{
+                width: 20,
+                height: 20,
+                transform: [{ rotate: "-90deg" }],
+              }}
+              contentFit="contain"
+            />
+            <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
+              Dismiss
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView className="flex-1">
         <View className="px-6 py-4">

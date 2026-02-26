@@ -9,25 +9,11 @@ import { ReadyToScan } from "./ReadyToScan";
 import { ScannedData } from "./ScannedData";
 import { Image } from "expo-image";
 
-const logsIcon = `data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="4.19531" y="5.09766" width="15.6094" height="2.5" fill="white"/>
-<rect x="4.19531" y="10.4668" width="15.6094" height="2.5" fill="white"/>
-<rect x="4.19531" y="15.8359" width="10.3789" height="2.5" fill="white"/>
-</svg>`;
+const logsIcon =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSI0LjE5NTMxIiB5PSI1LjA5NzY2IiB3aWR0aD0iMTUuNjA5NCIgaGVpZ2h0PSIyLjUiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iNC4xOTUzMSIgeT0iMTAuNDY2OCIgd2lkdGg9IjE1LjYwOTQiIGhlaWdodD0iMi41IiBmaWxsPSJ3aGl0ZSIvPjxyZWN0IHg9IjQuMTk1MzEiIHk9IjE1LjgzNTkiIHdpZHRoPSIxMC4zNzg5IiBoZWlnaHQ9IjIuNSIgZmlsbD0id2hpdGUiLz48L3N2Zz4=";
 
-const qrIcon = `data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="10.918" y="4.60156" width="2.16519" height="2.16519" fill="white"/>
-<rect x="10.918" y="7.84961" width="2.16519" height="2.16519" fill="white"/>
-<rect x="10.918" y="13.9863" width="2.16519" height="2.16519" fill="white"/>
-<rect x="17.7422" y="13.9863" width="2.16519" height="2.16519" fill="white"/>
-<rect x="14.4961" y="17.2324" width="2.16519" height="2.16519" fill="white"/>
-<rect x="14.4961" y="10.918" width="2.16519" height="2.16519" fill="white"/>
-<rect x="4.08984" y="10.918" width="2.16519" height="2.16519" fill="white"/>
-<rect x="7.33984" y="10.918" width="2.16519" height="2.16519" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M9.50282 4.60156H4.08984V10.0145H9.50282V4.60156ZM7.90853 6.25506H5.74334V8.42025H7.90853V6.25506Z" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M9.50282 13.9844H4.08984V19.3974H9.50282V13.9844ZM7.90853 15.6379H5.74334V17.8031H7.90853V15.6379Z" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M19.9052 4.60156H14.4922V10.0145H19.9052V4.60156ZM18.3109 6.25506H16.1457V8.42025H18.3109V6.25506Z" fill="white"/>
-</svg>`;
+const qrIcon =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIxMC45MTgiIHk9IjQuNjAxNTYiIHdpZHRoPSIyLjE2NTE5IiBoZWlnaHQ9IjIuMTY1MTkiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTAuOTE4IiB5PSI3Ljg0OTYxIiB3aWR0aD0iMi4xNjUxOSIgaGVpZ2h0PSIyLjE2NTE5IiBmaWxsPSJ3aGl0ZSIvPjxyZWN0IHg9IjEwLjkxOCIgeT0iMTMuOTg2MyIgd2lkdGg9IjIuMTY1MTkiIGhlaWdodD0iMi4xNjUxOSIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIxNy43NDIyIiB5PSIxMy45ODYzIiB3aWR0aD0iMi4xNjUxOSIgaGVpZ2h0PSIyLjE2NTE5IiBmaWxsPSJ3aGl0ZSIvPjxyZWN0IHg9IjE0LjQ5NjEiIHk9IjE3LjIzMjQiIHdpZHRoPSIyLjE2NTE5IiBoZWlnaHQ9IjIuMTY1MTkiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTQuNDk2MSIgeT0iMTAuOTE4IiB3aWR0aD0iMi4xNjUxOSIgaGVpZ2h0PSIyLjE2NTE5IiBmaWxsPSJ3aGl0ZSIvPjxyZWN0IHg9IjQuMDg5ODQiIHk9IjEwLjkxOCIgd2lkdGg9IjIuMTY1MTkiIGhlaWdodD0iMi4xNjUxOSIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSI3LjMzOTg0IiB5PSIxMC45MTgiIHdpZHRoPSIyLjE2NTE5IiBoZWlnaHQ9IjIuMTY1MTkiIGZpbGw9IndoaXRlIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05LjUwMjgyIDQuNjAxNTZINC4wODk4NFYxMC4wMTQ1SDkuNTAyODJWNC42MDE1NlpNNy45MDg1MyA2LjI1NTA2SDUuNzQzMzRWOC40MjAyNUg3LjkwODUzVjYuMjU1MDZaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNOS41MDI4MiAxMy45ODQ0SDQuMDg5ODRWMTkuMzk3NEg5LjUwMjgyVjEzLjk4NDRaTTcuOTA4NTMgMTUuNjM3OUg1Ljc0MzM0VjE3LjgwMzFINy45MDg1M1YxNS42Mzc5WiIgZmlsbD0id2hpdGUiLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE5LjkwNTIgNC42MDE1NkgxNC40OTIyVjEwLjAxNDVIMTkuOTA1MlY0LjYwMTU2Wk0xOC4zMTA5IDYuMjU1MDZIMTYuMTQ1N1Y4LjQyMDI1SDE4LjMxMDlWNi4yNTUwNloiIGZpbGw9IndoaXRlIi8+PC9zdmc+";
 
 interface BarcodeResult {
   data: string;
