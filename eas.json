@@ -35,21 +35,15 @@
   },
   "submit": {
     "development-tf": {
-      "android": {
-        "serviceAccountKeyPath": "./google-play-service-account.json",
-        "releaseStatus": "draft"
-      },
       "ios": {
         "ascAppId": "6741717337"
       }
     },
     "production": {
-      "android": {
-        "serviceAccountKeyPath": "./google-play-service-account.json",
-        "releaseStatus": "draft"
-      },
       "ios": {
-        "ascAppId": "6741717337"
+        "appleId": "sampjon@gmail.com",
+        "ascAppId": "6741717337",
+        "appleTeamId": "NLUVE3B2AS"
       }
     }
   }
