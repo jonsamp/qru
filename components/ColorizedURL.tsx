@@ -6,10 +6,12 @@ interface ColorizedURLProps {
   url: string;
   style?: any;
   className?: string;
+  copyable?: boolean;
 }
 
-export function ColorizedURL({ url, style, className }: ColorizedURLProps) {
+export function ColorizedURL({ url, style, className, copyable = true }: ColorizedURLProps) {
   const handlePress = async () => {
+    if (!copyable) return;
     try {
       await Clipboard.setStringAsync(url);
       Alert.alert("Copied!", "Copied to clipboard");

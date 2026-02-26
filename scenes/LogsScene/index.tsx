@@ -103,6 +103,7 @@ export default function LogsScene() {
                 <ColorizedURL
                   url={item.url}
                   className="text-base font-[JetBrainsMonoNL-Regular]"
+                  copyable={false}
                 />
               </View>
             ))}
