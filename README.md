@@ -1,50 +1,25 @@
-# Welcome to your Expo app 👋
+# QRU?
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+QRU? is a QR code debugging app built originally to help debug [EAS Update](https://docs.expo.dev/eas-update/introduction/) QR codes. Now, it's a general purpose QR code scanner that breaks down scanned data into its component parts, making it easy to inspect what's inside any QR code.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Scan QR codes** with a live camera view
+- **Colorized URL breakdown** showing protocol, host, path, and query parameters at a glance
+- **Copy** scanned data to the clipboard
+- **Generate QR codes** from any previously scanned URL for sharing with other devices
+- **Scan log** to revisit and manage previously scanned codes
 
-   ```bash
-   npm install
-   ```
+## Platforms
 
-2. Start the app
+QRU? is available on:
 
-   ```bash
-    npx expo start
-   ```
+- iOS on the [App Store](https://apps.apple.com/us/app/qru/id6741717337)
+- Web at [qru.expo.app](https://qru.expo.app)
 
-In the output, you'll find options to open the app in a
+## Built with
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Expo](https://expo.dev)
+- [React Native](https://reactnative.dev)
+- [Expo Router](https://docs.expo.dev/router/introduction/)
+- [NativeWind](https://www.nativewind.dev/)
