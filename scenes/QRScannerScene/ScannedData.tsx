@@ -53,7 +53,7 @@ export function ScannedData({
   onClose,
 }: ScannedDataProps) {
   return (
-    <View
+    <Animated.View
       entering={SlideInDown.duration(400)}
       exiting={SlideOutDown.duration(400)}
       className="absolute z-10 pb-safe bottom-0 left-0 right-0 bg-black max-h-[60%]"
@@ -122,6 +122,6 @@ export function ScannedData({
           </>
         )}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 }

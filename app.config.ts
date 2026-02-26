@@ -3,7 +3,7 @@ import { ExpoConfig } from "expo/config";
 const isProduction = process.env.EAS_BUILD_PROFILE === "production";
 
 const config: ExpoConfig = {
-  version: "2025.54.0",
+  version: "2025.55.0",
   name: "QRU?",
   slug: "qru",
   orientation: "portrait",
@@ -13,7 +13,6 @@ const config: ExpoConfig = {
     : "./assets/images/icon-dev.png",
   scheme: "qru",
   userInterfaceStyle: "automatic",
-  newArchEnabled: true,
   ios: {
     supportsTablet: true,
     bundleIdentifier: `com.jonsamp.qru${isProduction ? "" : "-dev"}`,
@@ -44,6 +43,7 @@ const config: ExpoConfig = {
   plugins: [
     "expo-web-browser",
     "expo-router",
+    "expo-image",
     [
       "expo-splash-screen",
       {

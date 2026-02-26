@@ -1,6 +1,11 @@
 name: Testflight
 
 jobs:
+  deploy_web:
+    name: Deploy Web
+    type: deploy
+    params:
+      prod: true
   build_ios:
     name: Build iOS
     type: build
