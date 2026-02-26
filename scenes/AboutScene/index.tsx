@@ -20,7 +20,7 @@ export default function AboutScene() {
   return (
     <View className="flex-1 bg-[#111111]">
       <View className={Platform.OS === "android" ? "pt-safe" : ""}>
-        <View className="px-6 pt-6 pb-4 flex-row items-center justify-between border-b border-[#222222]">
+        <View className="px-6 pt-6 pb-4 flex-row items-center justify-between">
           <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
             ABOUT
           </Text>

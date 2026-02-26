@@ -30,6 +30,21 @@ export async function saveURL(url: string) {
   }
 }
 
+export async function deleteURL(url: string, timestamp: string) {
+  try {
+    const existingData = await AsyncStorage.getItem(STORAGE_KEY);
+    const existingURLs: SavedQRCode[] = existingData
+      ? JSON.parse(existingData)
+      : [];
+    const updatedURLs = existingURLs.filter(
+      (item) => !(item.url === url && item.timestamp === timestamp)
+    );
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedURLs));
+  } catch (error) {
+    console.error("Error deleting URL:", error);
+  }
+}
+
 export async function loadSavedURLs(): Promise<SavedQRCode[]> {
   try {
     const data = await AsyncStorage.getItem(STORAGE_KEY);

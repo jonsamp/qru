@@ -72,7 +72,7 @@ export function ScannedData({
       exiting={SlideOutDown.duration(400)}
       className="absolute z-10 pb-safe bottom-0 left-0 right-0 bg-black max-h-[60%]"
     >
-      <View className="flex-row justify-between items-center px-6 py-4 border-b border-[#222222]">
+      <View className="flex-row justify-between items-center px-6 py-4">
         <Text className="text-base font-[JetBrainsMonoNL-Bold] text-white">
           SCANNED DATA
         </Text>
@@ -138,7 +138,7 @@ export function ScannedData({
       </ScrollView>
       <View className="flex-row px-6 py-4">
         <TouchableOpacity
-          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-[#222222] bg-black"
+          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-[#333333] bg-black"
           onPress={handleCopy}
           activeOpacity={0.7}
         >
@@ -148,13 +148,13 @@ export function ScannedData({
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-t border-b border-r border-[#222222] bg-black"
+          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-t border-b border-r border-[#333333] bg-black"
           onPress={() => router.push({ pathname: "/generate-qr", params: { url: scannedURL || "" } })}
           activeOpacity={0.7}
         >
           <Ionicons name="qr-code-outline" size={18} color="#FFF" />
           <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
-            Generate QR
+            QR Code
           </Text>
         </TouchableOpacity>
       </View>
