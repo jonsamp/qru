@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { ParsedURL } from "../../utils/types";
 import * as Clipboard from "expo-clipboard";
+import * as Haptics from "expo-haptics";
 
 interface ScannedDataProps {
   parsedURL: ParsedURL;
@@ -52,6 +53,17 @@ export function ScannedData({
   scannedURL,
   onClose,
 }: ScannedDataProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(async () => {
+    if (scannedURL) {
+      await Clipboard.setStringAsync(scannedURL);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }
+  }, [scannedURL]);
+
   return (
     <Animated.View
       entering={SlideInDown.duration(400)}
@@ -122,19 +134,19 @@ export function ScannedData({
           </>
         )}
       </ScrollView>
-      <View className="flex-row px-6 py-4 gap-4">
+      <View className="flex-row px-6 py-4">
         <TouchableOpacity
           className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-gray-700 bg-black"
-          onPress={() => {}}
+          onPress={handleCopy}
           activeOpacity={0.7}
         >
-          <Ionicons name="copy-outline" size={18} color="#FFF" />
-          <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
-            Copy
+          <Ionicons name={copied ? "checkmark" : "copy-outline"} size={18} color={copied ? "#4ade80" : "#FFF"} />
+          <Text className={`font-[JetBrainsMonoNL-Regular] text-sm ${copied ? "text-green-400" : "text-white"}`}>
+            {copied ? "Copied" : "Copy"}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-gray-700 bg-black"
+          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-t border-b border-r border-gray-700 bg-black"
           onPress={() => {}}
           activeOpacity={0.7}
         >

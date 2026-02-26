@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
+import { Ionicons } from "@expo/vector-icons";
+import * as Clipboard from "expo-clipboard";
+import * as Haptics from "expo-haptics";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { loadSavedURLs } from "../../utils/storage";
 import { SavedQRCode } from "../../utils/types";
@@ -12,6 +15,14 @@ const backIcon =
 export default function LogsScene() {
   const router = useRouter();
   const [savedURLs, setSavedURLs] = useState<SavedQRCode[]>([]);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  const handleCopy = useCallback(async (url: string, index: number) => {
+    await Clipboard.setStringAsync(url);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 1500);
+  }, []);
 
   useEffect(() => {
     async function loadURLs() {
@@ -68,13 +79,31 @@ export default function LogsScene() {
                   index !== 0 ? "border-t border-gray-700" : ""
                 }`}
               >
+                <View className="flex-row items-center justify-between mb-3">
+                  <Text className="text-white font-[JetBrainsMonoNL-Bold] text-base">
+                    {new Date(item.timestamp).toLocaleString()}
+                  </Text>
+                  <View className="flex-row">
+                    <TouchableOpacity
+                      className="w-12 h-12 items-center justify-center border-l border-t border-b border-r border-gray-700 bg-black"
+                      onPress={() => handleCopy(item.url, index)}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons name={copiedIndex === index ? "checkmark" : "copy-outline"} size={20} color={copiedIndex === index ? "#4ade80" : "#FFF"} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="w-12 h-12 items-center justify-center border-t border-b border-r border-gray-700 bg-black"
+                      onPress={() => {}}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons name="qr-code-outline" size={20} color="#FFF" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
                 <ColorizedURL
                   url={item.url}
                   className="text-base font-[JetBrainsMonoNL-Regular]"
                 />
-                <Text className="text-gray-500 font-[JetBrainsMonoNL-Regular] text-sm mt-1">
-                  {new Date(item.timestamp).toLocaleString()}
-                </Text>
               </View>
             ))}
           </View>
