@@ -6,12 +6,23 @@ jobs:
     type: deploy
     params:
       prod: true
+  build_android:
+    name: Build Android
+    type: build
+    params:
+      platform: android
   build_ios:
     name: Build iOS
     type: build
     params:
       platform: ios
       profile: production
+  send_to_play_store:
+    name: Send to Play Store
+    needs: [build_android]
+    type: submit
+    params:
+      build_id: ${{ needs.build_android.outputs.build_id }}
   send_to_testflight:
     name: Send to Testflight
     needs: [build_ios]
