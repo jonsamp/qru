@@ -1,4 +1,4 @@
-name: Testflight
+name: Release
 
 jobs:
   deploy_web:
