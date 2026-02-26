@@ -122,6 +122,28 @@ export function ScannedData({
           </>
         )}
       </ScrollView>
+      <View className="flex-row px-6 py-4 gap-4">
+        <TouchableOpacity
+          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-gray-700 bg-black"
+          onPress={() => {}}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="copy-outline" size={18} color="#FFF" />
+          <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
+            Copy
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-gray-700 bg-black"
+          onPress={() => {}}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="qr-code-outline" size={18} color="#FFF" />
+          <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
+            Generate QR
+          </Text>
+        </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 }
