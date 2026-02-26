@@ -17,6 +17,7 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@rnrepo/expo-config-plugin": "^0.2.2-beta.0",
     "expo": "^55.0.0",
     "expo-blur": "~55.0.8",
     "expo-camera": "~55.0.9",
@@ -50,7 +51,6 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@tailwindcss/postcss": "^4.2.1",
-    "tailwindcss": "^4.2.1",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~19.2.10",
@@ -59,6 +59,7 @@
     "jest-expo": "~55.0.9",
     "postcss": "^8.5.6",
     "react-test-renderer": "18.3.1",
+    "tailwindcss": "^4.2.1",
     "typescript": "~5.9.2"
   },
   "private": true,

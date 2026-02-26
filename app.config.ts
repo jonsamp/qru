@@ -41,9 +41,10 @@ const config: ExpoConfig = {
     output: "static",
   },
   plugins: [
+    "expo-image",
+    "@rnrepo/expo-config-plugin",
     "expo-web-browser",
     "expo-router",
-    "expo-image",
     [
       "expo-splash-screen",
       {
