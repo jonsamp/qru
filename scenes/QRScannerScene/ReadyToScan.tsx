@@ -6,15 +6,15 @@ import readyToScanGif from "../../assets/images/ready-to-scan.gif";
 export function ReadyToScan() {
   return (
     <View className="items-center justify-center">
-      <View>
+      <View className="items-center justify-center gap-1">
         <Text className="text-white font-[JetBrainsMonoNL-Bold] text-base pb-1">
           READY TO SCAN
         </Text>
-        <View>
+        <View className="items-center h-2">
           <Image
             source={readyToScanGif}
             style={{
-              width: 360 / 3 + 4,
+              width: 360 / 3,
               height: 2,
             }}
           />
