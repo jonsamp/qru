@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Linking,
   ScrollView,
+  Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
@@ -17,9 +18,9 @@ export default function AboutScene() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-gray-900">
-      <View className="pt-safe">
-        <View className="px-6 py-4 flex-row items-center justify-between border-b border-gray-700">
+    <View className="flex-1 bg-[#111111]">
+      <View className={Platform.OS === "android" ? "pt-safe" : ""}>
+        <View className="px-6 pt-6 pb-4 flex-row items-center justify-between border-b border-[#222222]">
           <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
             ABOUT
           </Text>
@@ -46,51 +47,19 @@ export default function AboutScene() {
         <View className="px-6 py-4">
           <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
             QRU? is a QR code debugging app built originally to help debug EAS
-            Update QR codes. Now, it's a general purpose QR code scanner, and
-            it's fun to scan codes to see what data they contain.
+            Update QR codes. Now, it's a general purpose QR code scanner. You
+            can copy scanned data and view the actual QR code for scanning with
+            other devices.
           </Text>
         </View>
         <View className="px-6 py-4">
           <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
-            You can find this app's source code on GitHub at:{" "}
+            QRU? is available on Android, iOS, and on the web at{" "}
             <Text
               className="underline"
-              onPress={() => Linking.openURL("https://github.com/jonsamp/qru")}
+              onPress={() => Linking.openURL("https://qru.expo.app")}
             >
-              https://github.com/jonsamp/qru
-            </Text>
-            .
-          </Text>
-        </View>
-        <View className="px-6 py-4">
-          <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
-            This app is built with{" "}
-            <Text
-              className="underline"
-              onPress={() => Linking.openURL("https://expo.dev")}
-            >
-              Expo
-            </Text>
-            . It was built and distributed automatically with{" "}
-            <Text
-              className="underline"
-              onPress={() => Linking.openURL("https://expo.dev/eas/workflows")}
-            >
-              EAS Workflows
-            </Text>
-            .
-          </Text>
-        </View>
-        <View className="px-6 py-4">
-          <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
-            Have feedback? Mention me on{" "}
-            <Text
-              className="underline"
-              onPress={() =>
-                Linking.openURL("https://bsky.app/profile/jonsamp.dev")
-              }
-            >
-              🦋 BlueSky
+              qru.expo.app
             </Text>
             .
           </Text>

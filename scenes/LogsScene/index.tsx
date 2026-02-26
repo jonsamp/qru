@@ -41,7 +41,7 @@ export default function LogsScene() {
   return (
     <View className="flex-1 bg-black">
       <View className="pt-safe">
-        <View className="px-6 py-4 flex-row items-center border-b border-gray-700">
+        <View className="px-6 py-4 flex-row items-center border-b border-[#222222]">
           <TouchableOpacity
             onPress={() => router.back()}
             className="z-10 items-center"
@@ -76,7 +76,7 @@ export default function LogsScene() {
               <View
                 key={item.url + index}
                 className={`py-4 px-6 ${
-                  index !== 0 ? "border-t border-gray-700" : ""
+                  index !== 0 ? "border-t border-[#222222]" : ""
                 }`}
               >
                 <View className="flex-row items-center justify-between mb-3">
@@ -85,15 +85,15 @@ export default function LogsScene() {
                   </Text>
                   <View className="flex-row">
                     <TouchableOpacity
-                      className="w-12 h-12 items-center justify-center border-l border-t border-b border-r border-gray-700 bg-black"
+                      className="w-12 h-12 items-center justify-center border-l border-t border-b border-r border-[#222222] bg-black"
                       onPress={() => handleCopy(item.url, index)}
                       activeOpacity={0.7}
                     >
                       <Ionicons name={copiedIndex === index ? "checkmark" : "copy-outline"} size={20} color={copiedIndex === index ? "#4ade80" : "#FFF"} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      className="w-12 h-12 items-center justify-center border-t border-b border-r border-gray-700 bg-black"
-                      onPress={() => {}}
+                      className="w-12 h-12 items-center justify-center border-t border-b border-r border-[#222222] bg-black"
+                      onPress={() => router.push({ pathname: "/generate-qr", params: { url: item.url } })}
                       activeOpacity={0.7}
                     >
                       <Ionicons name="qr-code-outline" size={20} color="#FFF" />

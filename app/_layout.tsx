@@ -28,6 +28,14 @@ export default function Layout() {
           presentation: "modal",
         }}
       />
+      <Stack.Screen
+        name="generate-qr"
+        options={{
+          title: "Generate QR",
+          headerShown: false,
+          presentation: "modal",
+        }}
+      />
     </Stack>
     </SafeAreaProvider>
   );

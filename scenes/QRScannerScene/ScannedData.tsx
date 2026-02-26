@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
+import { useRouter } from "expo-router";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { ParsedURL } from "../../utils/types";
 import * as Clipboard from "expo-clipboard";
@@ -53,6 +54,7 @@ export function ScannedData({
   scannedURL,
   onClose,
 }: ScannedDataProps) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
@@ -70,7 +72,7 @@ export function ScannedData({
       exiting={SlideOutDown.duration(400)}
       className="absolute z-10 pb-safe bottom-0 left-0 right-0 bg-black max-h-[60%]"
     >
-      <View className="flex-row justify-between items-center px-6 py-4 border-b border-gray-700">
+      <View className="flex-row justify-between items-center px-6 py-4 border-b border-[#222222]">
         <Text className="text-base font-[JetBrainsMonoNL-Bold] text-white">
           SCANNED DATA
         </Text>
@@ -136,7 +138,7 @@ export function ScannedData({
       </ScrollView>
       <View className="flex-row px-6 py-4">
         <TouchableOpacity
-          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-gray-700 bg-black"
+          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-[#222222] bg-black"
           onPress={handleCopy}
           activeOpacity={0.7}
         >
@@ -146,8 +148,8 @@ export function ScannedData({
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-t border-b border-r border-gray-700 bg-black"
-          onPress={() => {}}
+          className="flex-1 flex-row items-center justify-center gap-2 py-4 border-t border-b border-r border-[#222222] bg-black"
+          onPress={() => router.push({ pathname: "/generate-qr", params: { url: scannedURL || "" } })}
           activeOpacity={0.7}
         >
           <Ionicons name="qr-code-outline" size={18} color="#FFF" />

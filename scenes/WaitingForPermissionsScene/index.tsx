@@ -6,6 +6,7 @@ import {
   Dimensions,
   Linking,
   Text,
+  Platform,
 } from "react-native";
 import { useEffect, useState, useMemo } from "react";
 import { PermissionResponse, PermissionStatus } from "expo-camera";
@@ -34,8 +35,8 @@ export default function WeNeedPermissions(props: {
     opacity: pulseOpacity.value,
   }));
 
-  const screenWidth = Math.min(Dimensions.get("window").width, 800);
-  const CHAR_WIDTH = 8.3404255319;
+  const screenWidth = Math.min(Dimensions.get("window").width, Platform.OS === "web" ? 600 : 800);
+  const CHAR_WIDTH = Platform.OS === "web" ? 9.63 : 8.3404255319;
   const HORIZONTAL_PADDING = 48;
   const maxChars = Math.floor((screenWidth - HORIZONTAL_PADDING) / CHAR_WIDTH);
 
@@ -105,14 +106,14 @@ export default function WeNeedPermissions(props: {
 
             // If permission is already denied when messages finish, show denied message
             if (cameraPermission === PermissionStatus.DENIED) {
+              const deniedMessage = Platform.OS === "web"
+                ? "Camera access denied. Grant camera access in your browser to continue."
+                : "Camera access denied. Grant camera access in Settings to continue.";
               const deniedTimeout = setTimeout(() => {
                 setVisibleMessages((prev) => [
                   ...prev.slice(0, -1),
                   formatMessage("Getting camera permission", "DENIED"),
-                  formatMessage(
-                    "Camera access denied. Grant camera access in Settings to continue.",
-                    ""
-                  ),
+                  formatMessage(deniedMessage, ""),
                 ]);
               }, 200);
               timeoutsRef.current.push(deniedTimeout);
@@ -123,14 +124,14 @@ export default function WeNeedPermissions(props: {
         timeoutsRef.current.push(timeout);
       });
     } else if (cameraPermission === PermissionStatus.DENIED) {
+      const deniedMessage = Platform.OS === "web"
+        ? "Camera access denied. Grant camera access in your browser to continue."
+        : "Camera access denied. Grant camera access in Settings to continue.";
       // If messages are already shown and permission becomes denied, just update the last messages
       setVisibleMessages((prev) => [
         ...prev.slice(0, -1),
         formatMessage("Getting camera permission", "DENIED"),
-        formatMessage(
-          "Camera access denied. Grant camera access in Settings to continue.",
-          ""
-        ),
+        formatMessage(deniedMessage, ""),
       ]);
     }
 
@@ -161,8 +162,8 @@ export default function WeNeedPermissions(props: {
   const isDenied = cameraPermission === PermissionStatus.DENIED;
 
   return (
-    <View className="flex-1 bg-black p-safe">
-      <ScrollView className="flex-1 pt-10">
+    <View className="flex-1 bg-black p-safe items-center">
+      <ScrollView className="flex-1 pt-10" style={Platform.OS === "web" ? { maxWidth: 600, width: "100%" } : { width: "100%" }}>
         <View className="flex-1 px-6 gap-1">
           <Text className="text-white text-md font-[JetBrainsMonoNL-Bold]">
             {"> === WELCOME TO QRU ==="}
@@ -197,7 +198,7 @@ export default function WeNeedPermissions(props: {
                   </TouchableOpacity>
                 </View>
               )}
-              {isDenied && (
+              {isDenied && Platform.OS !== "web" && (
                 <View className="mt-3">
                   <TouchableOpacity
                     onPress={openSettings}
