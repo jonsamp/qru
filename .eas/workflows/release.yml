@@ -18,5 +18,3 @@ jobs:
     type: testflight
     params:
       build_id: ${{ needs.build_ios.outputs.build_id }}
-      internal_groups: ["Beta"]
-      profile: production
