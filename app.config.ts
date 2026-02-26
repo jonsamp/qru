@@ -63,9 +63,9 @@ const config: ExpoConfig = {
       "expo-font",
       {
         fonts: [
-          "./assets/fonts/JetBrainsMono-Regular.ttf",
-          "./assets/fonts/JetBrainsMono-Bold.ttf",
-          "./assets/fonts/JetBrainsMono-Italic.ttf",
+          "./assets/fonts/JetBrainsMonoNL-Regular.ttf",
+          "./assets/fonts/JetBrainsMonoNL-Bold.ttf",
+          "./assets/fonts/JetBrainsMonoNL-Italic.ttf",
         ],
       },
     ],
