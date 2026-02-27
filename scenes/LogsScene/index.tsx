@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert, Linking, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -24,22 +24,24 @@ export default function LogsScene() {
     setTimeout(() => setCopiedIndex(null), 1500);
   }, []);
 
-  const handleDelete = useCallback((item: SavedQRCode) => {
-    Alert.alert("Delete Entry", "Are you sure you want to delete this scan?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          await deleteURL(item.url, item.timestamp);
-          setSavedURLs((prev) =>
-            prev.filter(
-              (i) => !(i.url === item.url && i.timestamp === item.timestamp)
-            )
-          );
-        },
-      },
-    ]);
+  const handleDelete = useCallback(async (item: SavedQRCode) => {
+    const doDelete = async () => {
+      await deleteURL(item.url, item.timestamp);
+      setSavedURLs((prev) =>
+        prev.filter(
+          (i) => !(i.url === item.url && i.timestamp === item.timestamp)
+        )
+      );
+    };
+
+    if (Platform.OS === "web") {
+      await doDelete();
+    } else {
+      Alert.alert("Delete Entry", "Are you sure you want to delete this scan?", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: doDelete },
+      ]);
+    }
   }, []);
 
   useEffect(() => {
@@ -55,6 +57,17 @@ export default function LogsScene() {
 
     loadURLs();
   }, []);
+
+  function formatScanTime(timestamp: string) {
+    const d = new Date(timestamp);
+    const month = d.toLocaleString("en-US", { month: "short" });
+    const day = d.getDate();
+    const hours = d.getHours();
+    const mins = d.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const h = hours % 12 || 12;
+    return `${month} ${day} @ ${h}:${mins}${ampm}`;
+  }
 
   return (
     <View className="flex-1 bg-black">
@@ -93,30 +106,39 @@ export default function LogsScene() {
             {savedURLs.map((item, index) => (
               <View
                 key={item.url + index}
-                className="py-6"
+                className="pt-3 pb-4 border-b border-[#222]"
               >
-                <View className="flex-row mb-3">
-                  <View className="flex-1 h-14 justify-center px-6 border-t border-b border-[#333333] bg-[#141414]">
-                    <Text className="text-white font-[JetBrainsMonoNL-Bold] text-base">
-                      Scan {savedURLs.length - index}
+                <View className="flex-row">
+                  <View className="flex-1 h-14 justify-center px-6">
+                    <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
+                      {formatScanTime(item.timestamp)}
                     </Text>
                   </View>
                   <TouchableOpacity
-                    className="w-14 h-14 items-center justify-center border-l border-t border-b border-[#333333] bg-[#141414]"
+                    className="w-14 h-14 items-center justify-center"
                     onPress={() => handleCopy(item.url, index)}
                     activeOpacity={0.7}
                   >
                     <Ionicons name={copiedIndex === index ? "checkmark" : "copy-outline"} size={20} color={copiedIndex === index ? "#4ade80" : "#FFF"} />
                   </TouchableOpacity>
                   <TouchableOpacity
-                    className="w-14 h-14 items-center justify-center border-l border-t border-b border-[#333333] bg-[#141414]"
+                    className="w-14 h-14 items-center justify-center"
                     onPress={() => router.push({ pathname: "/generate-qr", params: { url: item.url } })}
                     activeOpacity={0.7}
                   >
                     <Ionicons name="qr-code-outline" size={20} color="#FFF" />
                   </TouchableOpacity>
+                  {/^https?:\/\//i.test(item.url) && (
+                    <TouchableOpacity
+                      className="w-14 h-14 items-center justify-center"
+                      onPress={() => Linking.openURL(item.url)}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons name="open-outline" size={20} color="#FFF" />
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity
-                    className="w-14 h-14 items-center justify-center border-l border-t border-b border-[#333333] bg-[#141414]"
+                    className="w-14 h-14 items-center justify-center"
                     onPress={() => handleDelete(item)}
                     activeOpacity={0.7}
                   >
@@ -129,9 +151,6 @@ export default function LogsScene() {
                     className="text-base font-[JetBrainsMonoNL-Regular]"
                     copyable={false}
                   />
-                  <Text className="text-gray-500 font-[JetBrainsMonoNL-Regular] text-sm mt-1">
-                    {new Date(item.timestamp).toLocaleString()}
-                  </Text>
                 </View>
               </View>
             ))}

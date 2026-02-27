@@ -7,9 +7,10 @@ interface ColorizedURLProps {
   style?: any;
   className?: string;
   copyable?: boolean;
+  numberOfLines?: number;
 }
 
-export function ColorizedURL({ url, style, className, copyable = true }: ColorizedURLProps) {
+export function ColorizedURL({ url, style, className, copyable = true, numberOfLines }: ColorizedURLProps) {
   const handlePress = async () => {
     if (!copyable) return;
     try {
@@ -48,6 +49,7 @@ export function ColorizedURL({ url, style, className, copyable = true }: Coloriz
         <Text
           className={`font-[JetBrainsMonoNL-Regular] text-lg text-white ${className}`}
           style={style}
+          numberOfLines={numberOfLines}
         >
           {url}
         </Text>
@@ -60,6 +62,7 @@ export function ColorizedURL({ url, style, className, copyable = true }: Coloriz
       <Text
         className={`font-[JetBrainsMonoNL-Regular] text-lg ${className}`}
         style={style}
+        numberOfLines={numberOfLines}
       >
         <Text className="text-[#FF4DB8]">{urlParts.protocol}</Text>
         <Text className="text-[#6B7280]">//</Text>

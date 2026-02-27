@@ -6,6 +6,8 @@ import {
   Alert,
   Pressable,
   ScrollView,
+  Linking,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
@@ -57,6 +59,16 @@ export function ScannedData({
   const router = useRouter();
   const [copied, setCopied] = useState(false);
 
+  const isURL = scannedURL
+    ? /^https?:\/\//i.test(scannedURL)
+    : false;
+
+  const handleVisit = useCallback(() => {
+    if (scannedURL) {
+      Linking.openURL(scannedURL);
+    }
+  }, [scannedURL]);
+
   const handleCopy = useCallback(async () => {
     if (scannedURL) {
       await Clipboard.setStringAsync(scannedURL);
@@ -70,7 +82,7 @@ export function ScannedData({
     <Animated.View
       entering={SlideInDown.duration(400)}
       exiting={SlideOutDown.duration(400)}
-      className="absolute z-10 pb-safe bottom-0 left-0 right-0 bg-black max-h-[60%]"
+      className="absolute z-10 bottom-0 left-0 right-0 bg-black max-h-[60%]"
     >
       <View className="flex-row justify-between items-center px-6 py-4">
         <Text className="text-base font-[JetBrainsMonoNL-Bold] text-white">
@@ -136,7 +148,7 @@ export function ScannedData({
           </>
         )}
       </ScrollView>
-      <View className="flex-row px-6 py-4">
+      <View className={`flex-row px-6 pt-4 ${Platform.OS === "web" ? "pb-4" : "pb-safe"}`}>
         <TouchableOpacity
           className="flex-1 flex-row items-center justify-center gap-2 py-4 border-l border-t border-b border-r border-[#333333] bg-black"
           onPress={handleCopy}
@@ -157,6 +169,18 @@ export function ScannedData({
             QR Code
           </Text>
         </TouchableOpacity>
+        {isURL && (
+          <TouchableOpacity
+            className="flex-1 flex-row items-center justify-center gap-2 py-4 border-t border-b border-r border-[#333333] bg-black"
+            onPress={handleVisit}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="open-outline" size={18} color="#FFF" />
+            <Text className="text-white font-[JetBrainsMonoNL-Regular] text-sm">
+              Visit
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </Animated.View>
   );
