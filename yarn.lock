@@ -1247,7 +1247,7 @@
   dependencies:
     node-forge "^1.3.3"
 
-"@expo/config-plugins@*", "@expo/config-plugins@~55.0.6":
+"@expo/config-plugins@~55.0.6":
   version "55.0.6"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-55.0.6.tgz#fcc5d6e2bfe9d48861d219fa8d2fe88116e6a7cb"
   integrity sha512-cIox6FjZlFaaX40rbQ3DvP9e87S5X85H9uw+BAxJE5timkMhuByy3GAlOsj1h96EyzSiol7Q6YIGgY1Jiz4M+A==
@@ -1266,7 +1266,7 @@
     xcode "^3.0.1"
     xml2js "0.6.0"
 
-"@expo/config-types@*", "@expo/config-types@^55.0.5":
+"@expo/config-types@^55.0.5":
   version "55.0.5"
   resolved "https://registry.yarnpkg.com/@expo/config-types/-/config-types-55.0.5.tgz#731ce3e95866254e18977c0026ebab8a00dd6e10"
   integrity sha512-sCmSUZG4mZ/ySXvfyyBdhjivz8Q539X1NondwDdYG7s3SBsk+wsgPJzYsqgAG/P9+l0xWjUD2F+kQ1cAJ6NNLg==
@@ -2238,14 +2238,6 @@
   integrity sha512-1tJHg4KKRJuQ1/EvJxatrMef3NZXEPzwUIUZ3n1yJ2t7Q97siwRtbynRpQG9/69ebbtiZ8W3ScOZF/OmhvM4Rg==
   dependencies:
     nanoid "^3.3.11"
-
-"@rnrepo/expo-config-plugin@^0.2.2-beta.0":
-  version "0.2.2-beta.0"
-  resolved "https://registry.yarnpkg.com/@rnrepo/expo-config-plugin/-/expo-config-plugin-0.2.2-beta.0.tgz#78a44d421d9a37f7a5789f14d086fa6fc1422edc"
-  integrity sha512-wWNL+sCKzs1vNpcIkYu7lwyGo81hHulS4/8++6cUP4xmcl0Go9E1T9fz4ueV1qDcMdivKyPDyZZcjHbG7L9gyw==
-  dependencies:
-    "@expo/config-plugins" "*"
-    "@expo/config-types" "*"
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
