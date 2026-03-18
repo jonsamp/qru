@@ -38,6 +38,20 @@ export default function Layout() {
           presentation: "modal",
         }}
       />
+      <Stack.Screen
+        name="home"
+        options={{
+          title: "QRU?",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="privacy"
+        options={{
+          title: "Privacy Policy",
+          headerShown: false,
+        }}
+      />
     </Stack>
     </SafeAreaProvider>
     </GestureHandlerRootView>
