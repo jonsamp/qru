@@ -1,9 +1,28 @@
 name: Submit for app review
 
+on:
+  workflow_dispatch:
+    inputs:
+      store:
+        type: choice
+        options:
+          - all
+          - app_store
+          - play_store
+        required: true
+        description: 'Which store(s) to submit to'
+      release_notes:
+        type: string
+        required: true
+        description: 'What''s new?'
+
 jobs:
   submit_ios:
     name: Submit iOS for App Review
+    if: ${{ inputs.store == 'all' || inputs.store == 'app_store' }}
     environment: production
+    env:
+      RELEASE_NOTES: ${{ inputs.release_notes || 'General bug fixes and improvements.' }}
     steps:
       - uses: eas/checkout
       - name: Submit to App Store Review
@@ -158,7 +177,7 @@ jobs:
                 data: {
                   type: "appStoreVersionLocalizations",
                   id: enUsLocalization.id,
-                  attributes: { whatsNew: "General bug fixes and improvements." },
+                  attributes: { whatsNew: process.env.RELEASE_NOTES },
                 },
               }),
             });
@@ -214,7 +233,10 @@ jobs:
 
   submit_android:
     name: Submit Android to Production
+    if: ${{ inputs.store == 'all' || inputs.store == 'play_store' }}
     environment: production
+    env:
+      RELEASE_NOTES: ${{ inputs.release_notes || 'General bug fixes and improvements.' }}
     steps:
       - uses: eas/checkout
       - name: Promote to Play Store production
@@ -338,7 +360,7 @@ jobs:
                     status: "completed",
                     versionCodes,
                     releaseNotes: [
-                      { language: "en-US", text: "General bug fixes and improvements." },
+                      { language: "en-US", text: process.env.RELEASE_NOTES },
                     ],
                   },
                 ],
