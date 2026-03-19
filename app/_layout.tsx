@@ -1,9 +1,15 @@
+import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AppMetrics from "expo-eas-observe";
 import "../global.css";
 
 export default function Layout() {
+  useEffect(() => {
+    AppMetrics.markInteractive();
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
     <SafeAreaProvider>

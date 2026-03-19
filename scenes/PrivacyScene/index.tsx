@@ -68,7 +68,7 @@ export default function PrivacyScene() {
             className="font-[JetBrainsMonoNL-Regular]"
             style={{ color: "#b0b4ba", fontSize: 14, marginTop: 8, marginBottom: 24 }}
           >
-            Last Updated: March 18, 2026
+            Last Updated: March 19, 2026
           </Text>
 
           <Body>
@@ -95,19 +95,34 @@ export default function PrivacyScene() {
 
           <SubTitle>Automatically Collected Information</SubTitle>
           <Body>
-            The App does not automatically collect any personal information. No
-            analytics, crash reporting, or usage tracking is implemented.
+            The App uses Expo Insights and Expo EAS Observe to collect anonymous
+            usage and performance data. This may include app launches, session
+            duration, crash reports, and basic device metadata (such as platform,
+            OS version, and app version). This data is sent to Expo's servers and
+            does not include personal information or any content you scan.
           </Body>
 
           <SectionTitle>Third-Party Services</SectionTitle>
           <Body>
-            The App uses the following third-party service that may process limited
-            data:
+            The App uses the following third-party services that may process
+            limited data:
           </Body>
           <Bullet>
-            Expo — Provides over-the-air app updates. When checking for updates,
-            basic request metadata (such as app version and platform) may be sent
-            to Expo's update servers. No personal information is included.
+            Expo Updates — Provides over-the-air app updates. When checking for
+            updates, basic request metadata (such as app version and platform)
+            may be sent to Expo's update servers. No personal information is
+            included.
+          </Bullet>
+          <Bullet>
+            Expo Insights — Collects anonymous app usage data such as session
+            counts and app launches to help us understand how the App is used.
+            No personal information is collected.
+          </Bullet>
+          <Bullet>
+            Expo EAS Observe — Collects crash reports and performance data to
+            help us identify and fix issues. This may include stack traces,
+            device metadata, and app state at the time of a crash. No personal
+            information is included.
           </Bullet>
 
           <SectionTitle>What We Do Not Collect</SectionTitle>
@@ -117,7 +132,7 @@ export default function PrivacyScene() {
           <Bullet>Device identifiers or advertising IDs</Bullet>
           <Bullet>Photos, contacts, or calendar data</Bullet>
           <Bullet>Health or fitness data</Bullet>
-          <Bullet>Browsing history or usage analytics</Bullet>
+          <Bullet>Browsing history or personal usage analytics</Bullet>
           <Body>
             The App does not require an account or login. There is no user tracking
             across sessions or devices.
