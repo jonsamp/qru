@@ -3,7 +3,7 @@ import { ExpoConfig } from "expo/config";
 const isProduction = process.env.EAS_BUILD_PROFILE === "production";
 
 const config: ExpoConfig = {
-  version: "2026.55.0",
+  version: process.env.APP_VERSION || "2026.0",
   name: "QRU?",
   slug: "qru",
   orientation: "portrait",
