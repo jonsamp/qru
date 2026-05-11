@@ -170,18 +170,26 @@ export default function WeNeedPermissions(props: {
           </Text>
           {visibleMessages.map((message, index) => {
             const isDeniedMessage = message.includes("Camera access denied");
-            const MessageComponent = isDeniedMessage ? Animated.Text : Text;
+
+            if (isDeniedMessage) {
+              return (
+                <Animated.Text
+                  key={index}
+                  className="text-md font-[JetBrainsMonoNL-Regular] text-red-400"
+                  style={pulseStyle}
+                >
+                  {message}
+                </Animated.Text>
+              );
+            }
 
             return (
-              <MessageComponent
+              <Text
                 key={index}
-                className={`text-md font-[JetBrainsMonoNL-Regular] ${
-                  isDeniedMessage ? "text-red-400" : "text-white"
-                }`}
-                style={isDeniedMessage ? pulseStyle : undefined}
+                className="text-md font-[JetBrainsMonoNL-Regular] text-white"
               >
                 {message}
-              </MessageComponent>
+              </Text>
             );
           })}
           {allMessagesDisplayed && (
