@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import QRCode from "qrcode";
 import * as Clipboard from "expo-clipboard";
+import { Observe } from "expo-observe";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { parseCustomURL } from "../../utils/urlParser";
 import { ParsedURL } from "../../utils/types";
@@ -53,13 +54,20 @@ export default function GenerateQRScene() {
 
   useEffect(() => {
     if (url) {
+      const parsed = parseCustomURL(url);
       QRCode.toString(url, { type: "svg", margin: 0 }, (err, svg) => {
         if (!err && svg) {
           const base64 = btoa(svg);
           setQrDataUri(`data:image/svg+xml;base64,${base64}`);
+          Observe.logEvent("qru.qr_generated", {
+            attributes: {
+              isUrl: /^https?:\/\//i.test(url),
+              protocol: parsed.protocol,
+            },
+          });
         }
       });
-      setParsedURL(parseCustomURL(url));
+      setParsedURL(parsed);
     }
   }, [url]);
 

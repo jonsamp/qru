@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { CameraView } from "expo-camera";
+import { Observe } from "expo-observe";
 import { parseCustomURL } from "../../utils/urlParser";
 import { saveURL } from "../../utils/storage";
 import { ParsedURL } from "../../utils/types";
@@ -24,12 +25,27 @@ export default function QRScannerScene() {
   const [scannedURL, setScannedURL] = useState<string | null>(null);
   const [parsedURL, setParsedURL] = useState<ParsedURL | null>(null);
   const [isCardVisible, setIsCardVisible] = useState(true);
+  const lastLoggedURL = useRef<string | null>(null);
 
   function handleBarcodeScanned(result: BarcodeResult) {
+    const parsed = parseCustomURL(result.data);
     setScannedURL(result.data);
-    setParsedURL(parseCustomURL(result.data));
+    setParsedURL(parsed);
     saveURL(result.data);
     setIsCardVisible(true);
+
+    // onBarcodeScanned fires continuously while a code is in frame, so only
+    // log once per distinct code rather than on every camera frame.
+    if (result.data !== lastLoggedURL.current) {
+      lastLoggedURL.current = result.data;
+      Observe.logEvent("qru.qr_scanned", {
+        attributes: {
+          isUrl: /^https?:\/\//i.test(result.data),
+          protocol: parsed.protocol,
+          contentLength: result.data.length,
+        },
+      });
+    }
   }
 
   return (
