@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { CameraView } from "expo-camera";
-import { Observe } from "expo-observe";
+import { logEvent } from "../../utils/analytics";
 import { parseCustomURL } from "../../utils/urlParser";
 import { saveURL } from "../../utils/storage";
 import { ParsedURL } from "../../utils/types";
@@ -38,7 +38,7 @@ export default function QRScannerScene() {
     // log once per distinct code rather than on every camera frame.
     if (result.data !== lastLoggedURL.current) {
       lastLoggedURL.current = result.data;
-      Observe.logEvent("qru.qr_scanned", {
+      logEvent("qru.qr_scanned", {
         attributes: {
           isUrl: /^https?:\/\//i.test(result.data),
           protocol: parsed.protocol,

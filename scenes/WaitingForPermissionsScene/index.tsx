@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useEffect, useState, useMemo } from "react";
 import { PermissionResponse, PermissionStatus } from "expo-camera";
-import { Observe } from "expo-observe";
+import { logEvent } from "../../utils/analytics";
 import Animated, {
   useAnimatedStyle,
   withRepeat,
@@ -158,7 +158,7 @@ export default function WeNeedPermissions(props: {
   async function requestCameraAccessAsync() {
     const result = await requestPermission();
     setCameraPermission(result.status);
-    Observe.logEvent("qru.camera_permission_resolved", {
+    logEvent("qru.camera_permission_resolved", {
       severity: result.status === PermissionStatus.GRANTED ? "info" : "warn",
       attributes: { status: result.status },
     });

@@ -5,7 +5,7 @@ import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
-import { Observe } from "expo-observe";
+import { logEvent } from "../../utils/analytics";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { loadSavedURLs, deleteURL } from "../../utils/storage";
 import { parseCustomURL } from "../../utils/urlParser";
@@ -21,7 +21,7 @@ export default function LogsScene() {
 
   const handleCopy = useCallback(async (url: string, index: number) => {
     await Clipboard.setStringAsync(url);
-    Observe.logEvent("qru.scan_copied", {
+    logEvent("qru.scan_copied", {
       attributes: { source: "log", protocol: parseCustomURL(url).protocol },
     });
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -32,7 +32,7 @@ export default function LogsScene() {
   const handleDelete = useCallback(async (item: SavedQRCode) => {
     const doDelete = async () => {
       await deleteURL(item.url, item.timestamp);
-      Observe.logEvent("qru.scan_deleted", {
+      logEvent("qru.scan_deleted", {
         attributes: { protocol: parseCustomURL(item.url).protocol },
       });
       setSavedURLs((prev) =>

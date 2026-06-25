@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import QRCode from "qrcode";
 import * as Clipboard from "expo-clipboard";
-import { Observe } from "expo-observe";
+import { logEvent } from "../../utils/analytics";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { parseCustomURL } from "../../utils/urlParser";
 import { ParsedURL } from "../../utils/types";
@@ -59,7 +59,7 @@ export default function GenerateQRScene() {
         if (!err && svg) {
           const base64 = btoa(svg);
           setQrDataUri(`data:image/svg+xml;base64,${base64}`);
-          Observe.logEvent("qru.qr_generated", {
+          logEvent("qru.qr_generated", {
             attributes: {
               isUrl: /^https?:\/\//i.test(url),
               protocol: parsed.protocol,

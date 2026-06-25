@@ -16,7 +16,7 @@ import { ColorizedURL } from "../../components/ColorizedURL";
 import { ParsedURL } from "../../utils/types";
 import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
-import { Observe } from "expo-observe";
+import { logEvent } from "../../utils/analytics";
 
 interface ScannedDataProps {
   parsedURL: ParsedURL;
@@ -28,7 +28,7 @@ function CopyableText({ label, value }: { label: string; value: string }) {
   const handlePress = async () => {
     try {
       await Clipboard.setStringAsync(value);
-      Observe.logEvent("qru.scan_copied", {
+      logEvent("qru.scan_copied", {
         attributes: {
           source: "field",
           field: label.startsWith("Param: ") ? "param" : label.toLowerCase(),
@@ -72,7 +72,7 @@ export function ScannedData({
 
   const handleVisit = useCallback(() => {
     if (scannedURL) {
-      Observe.logEvent("qru.scanned_url_visited", {
+      logEvent("qru.scanned_url_visited", {
         attributes: { protocol: parsedURL.protocol },
       });
       Linking.openURL(scannedURL);
@@ -82,7 +82,7 @@ export function ScannedData({
   const handleCopy = useCallback(async () => {
     if (scannedURL) {
       await Clipboard.setStringAsync(scannedURL);
-      Observe.logEvent("qru.scan_copied", {
+      logEvent("qru.scan_copied", {
         attributes: { source: "scan_result", protocol: parsedURL.protocol },
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
