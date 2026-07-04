@@ -43,6 +43,7 @@ const config: ExpoConfig = {
   plugins: [
     "expo-image",
     "expo-web-browser",
+    "expo-status-bar",
     "expo-router",
     [
       "expo-splash-screen",
