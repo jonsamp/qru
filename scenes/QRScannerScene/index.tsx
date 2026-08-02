@@ -50,51 +50,50 @@ export default function QRScannerScene() {
 
   return (
     <View className="flex-1 bg-black">
+      <View className="pt-safe bg-black">
+        <View className="px-6 py-2 justify-between flex-row items-center">
+          <View>
+            <TouchableOpacity
+              className="flex-row items-center gap-1.5"
+              onPress={() => router.push("/about")}
+            >
+              <Image
+                source={qrIcon}
+                style={{ width: 26, height: 26 }}
+                contentFit="contain"
+              />
+              <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
+                QRU?
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View className="relative -left-1">
+            <ReadyToScan />
+          </View>
+          <View>
+            <TouchableOpacity
+              className="px-4 py-1.5 items-center justify-center"
+              onPress={() => router.push("/logs")}
+            >
+              <Image
+                source={logsIcon}
+                style={{ width: 20, height: 20 }}
+                contentFit="contain"
+              />
+              <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
+                Log
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
       <CameraView
         style={{ flex: 1 }}
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
         }}
         onBarcodeScanned={handleBarcodeScanned}
-      >
-        <View className="pt-safe bg-black">
-          <View className="px-6 py-2 justify-between flex-row items-center">
-            <View>
-              <TouchableOpacity
-                className="flex-row items-center gap-1.5"
-                onPress={() => router.push("/about")}
-              >
-                <Image
-                  source={qrIcon}
-                  style={{ width: 26, height: 26 }}
-                  contentFit="contain"
-                />
-                <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
-                  QRU?
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View className="relative -left-1">
-              <ReadyToScan />
-            </View>
-            <View>
-              <TouchableOpacity
-                className="px-4 py-1.5 items-center justify-center"
-                onPress={() => router.push("/logs")}
-              >
-                <Image
-                  source={logsIcon}
-                  style={{ width: 20, height: 20 }}
-                  contentFit="contain"
-                />
-                <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
-                  Log
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </CameraView>
+      />
       {parsedURL && isCardVisible && (
         <ScannedData
           parsedURL={parsedURL}
