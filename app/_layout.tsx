@@ -1,15 +1,16 @@
-import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { AppMetrics } from "expo-observe";
+import { Observe, ObserveRoot } from "expo-observe";
 import "../global.css";
 
-export default function Layout() {
-  useEffect(() => {
-    AppMetrics.markInteractive();
-  }, []);
+Observe.configure({
+  integrations: {
+    "expo-router": { filteredParams: ["url"] },
+  },
+});
 
+function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
@@ -63,3 +64,5 @@ export default function Layout() {
     </GestureHandlerRootView>
   );
 }
+
+export default ObserveRoot.wrap(Layout);

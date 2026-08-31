@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, ScrollView } from "react-native";
+import { useObserve } from "expo-observe";
 
 function SectionTitle({ children }: { children: string }) {
   return (
@@ -47,6 +48,12 @@ function Bullet({ children }: { children: string }) {
 }
 
 export default function PrivacyScene() {
+  const { markInteractive } = useObserve();
+
+  useEffect(() => {
+    markInteractive();
+  }, [markInteractive]);
+
   return (
     <View className="flex-1 bg-black">
       <ScrollView className="flex-1">

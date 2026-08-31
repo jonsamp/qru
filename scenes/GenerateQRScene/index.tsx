@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import QRCode from "qrcode";
 import * as Clipboard from "expo-clipboard";
+import { useObserve } from "expo-observe";
 import { logEvent } from "../../utils/analytics";
 import { ColorizedURL } from "../../components/ColorizedURL";
 import { parseCustomURL } from "../../utils/urlParser";
@@ -51,6 +52,18 @@ export default function GenerateQRScene() {
   const { url } = useLocalSearchParams<{ url: string }>();
   const [qrDataUri, setQrDataUri] = useState<string | null>(null);
   const [parsedURL, setParsedURL] = useState<ParsedURL | null>(null);
+  const { markInteractive } = useObserve();
+
+  useEffect(() => {
+    if (!url) {
+      markInteractive({ params: { hasUrl: false } });
+      return;
+    }
+
+    if (qrDataUri) {
+      markInteractive({ params: { hasUrl: true } });
+    }
+  }, [url, qrDataUri, markInteractive]);
 
   useEffect(() => {
     if (url) {

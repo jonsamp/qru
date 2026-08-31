@@ -7,6 +7,7 @@ import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import { logEvent } from "../../utils/analytics";
 import { ColorizedURL } from "../../components/ColorizedURL";
+import { useObserve } from "expo-observe";
 import { loadSavedURLs, deleteURL } from "../../utils/storage";
 import { parseCustomURL } from "../../utils/urlParser";
 import { SavedQRCode } from "../../utils/types";
@@ -18,6 +19,8 @@ export default function LogsScene() {
   const router = useRouter();
   const [savedURLs, setSavedURLs] = useState<SavedQRCode[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const { markInteractive } = useObserve();
 
   const handleCopy = useCallback(async (url: string, index: number) => {
     await Clipboard.setStringAsync(url);
@@ -61,10 +64,17 @@ export default function LogsScene() {
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
       setSavedURLs(sortedUrls);
+      setHasLoaded(true);
     }
 
     loadURLs();
   }, []);
+
+  useEffect(() => {
+    if (hasLoaded) {
+      markInteractive({ params: { savedCount: savedURLs.length } });
+    }
+  }, [hasLoaded, markInteractive]);
 
   function formatScanTime(timestamp: string) {
     const d = new Date(timestamp);
