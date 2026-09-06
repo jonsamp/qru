@@ -1,16 +1,25 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import { ColorizedURL } from "./ColorizedURL";
+import { ToastProvider } from "./Toast";
 import * as Clipboard from "expo-clipboard";
-import { Alert } from "react-native";
 
-// Mock the expo-clipboard module
 jest.mock("expo-clipboard", () => ({
   setStringAsync: jest.fn(),
 }));
 
-// Mock the Alert.alert
-jest.spyOn(Alert, "alert");
+jest.mock("expo-haptics", () => ({
+  notificationAsync: jest.fn(),
+  NotificationFeedbackType: { Success: "success" },
+}));
+
+function renderURL(url: string) {
+  return render(
+    <ToastProvider>
+      <ColorizedURL url={url} />
+    </ToastProvider>
+  );
+}
 
 describe("ColorizedURL", () => {
   beforeEach(() => {
@@ -18,7 +27,7 @@ describe("ColorizedURL", () => {
   });
 
   it("renders a simple URL correctly", () => {
-    const { getByText } = render(<ColorizedURL url="https://example.com" />);
+    const { getByText } = renderURL("https://example.com");
 
     expect(getByText("https:")).toBeTruthy();
     expect(getByText("//")).toBeTruthy();
@@ -26,16 +35,14 @@ describe("ColorizedURL", () => {
   });
 
   it("renders a URL with pathname correctly", () => {
-    const { getByText } = render(
-      <ColorizedURL url="https://example.com/path" />
-    );
+    const { getByText } = renderURL("https://example.com/path");
 
     expect(getByText("/path")).toBeTruthy();
   });
 
   it("renders a URL with query parameters correctly", () => {
-    const { getByText } = render(
-      <ColorizedURL url="https://example.com/path?param1=value1&param2=value2" />
+    const { getByText } = renderURL(
+      "https://example.com/path?param1=value1&param2=value2"
     );
 
     expect(getByText("param1")).toBeTruthy();
@@ -45,48 +52,45 @@ describe("ColorizedURL", () => {
   });
 
   it("handles invalid URLs gracefully", () => {
-    const { getByText } = render(<ColorizedURL url="not-a-valid-url" />);
+    const { getByText } = renderURL("not-a-valid-url");
 
     expect(getByText("not-a-valid-url")).toBeTruthy();
   });
 
-  it("copies URL to clipboard when pressed", async () => {
-    const url = "https://example.com";
-    const { getByText } = render(<ColorizedURL url={url} />);
+  it("does not invent syntax for non-hierarchical URIs", () => {
+    const { getByText, queryByText } = renderURL("WIFI:S:Office;T:WPA;;");
 
-    // Mock successful clipboard operation
-    (Clipboard.setStringAsync as jest.Mock).mockResolvedValueOnce(undefined);
-
-    // Press the component
-    fireEvent.press(getByText("https:"));
-
-    // Wait for async operations to complete
-    await waitFor(() => {
-      expect(Clipboard.setStringAsync).toHaveBeenCalledWith(url);
-      expect(Alert.alert).toHaveBeenCalledWith(
-        "Copied!",
-        "Copied to clipboard"
-      );
-    });
+    expect(getByText("WIFI:")).toBeTruthy();
+    expect(getByText("S:Office;T:WPA;;")).toBeTruthy();
+    expect(queryByText("//")).toBeNull();
   });
 
-  it("shows error alert when clipboard operation fails", async () => {
+  it("copies URL to clipboard and confirms with a toast", async () => {
+    const url = "https://example.com";
+    const { getByText, findByText } = renderURL(url);
+
+    (Clipboard.setStringAsync as jest.Mock).mockResolvedValueOnce(undefined);
+
+    fireEvent.press(getByText("https:"));
+
+    await waitFor(() => {
+      expect(Clipboard.setStringAsync).toHaveBeenCalledWith(url);
+    });
+    expect(await findByText("Copied to clipboard")).toBeTruthy();
+  });
+
+  it("shows an error toast when the clipboard fails", async () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
     const url = "https://example.com";
-    const { getByText } = render(<ColorizedURL url={url} />);
+    const { getByText, findByText } = renderURL(url);
 
-    // Mock failed clipboard operation
     (Clipboard.setStringAsync as jest.Mock).mockRejectedValueOnce(
       new Error("Clipboard error")
     );
 
-    // Press the component
     fireEvent.press(getByText("https:"));
 
-    // Wait for async operations to complete
-    await waitFor(() => {
-      expect(Alert.alert).toHaveBeenCalledWith("Error", "Failed to copy URL");
-    });
+    expect(await findByText("Failed to copy")).toBeTruthy();
     (console.error as jest.Mock).mockRestore();
   });
 });

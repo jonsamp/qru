@@ -23,6 +23,18 @@ function Layout() {
             }}
           />
           <Stack.Screen
+            name="scanned"
+            options={{
+              title: "Scanned Data",
+              headerShown: false,
+              presentation: "formSheet",
+              sheetGrabberVisible: true,
+              sheetAllowedDetents: [0.45, 0.95],
+              sheetLargestUndimmedDetentIndex: 0,
+              contentStyle: { backgroundColor: "#111111" },
+            }}
+          />
+          <Stack.Screen
             name="logs"
             options={{
               title: "Logs",
@@ -42,7 +54,10 @@ function Layout() {
             options={{
               title: "Generate QR",
               headerShown: false,
-              presentation: "modal",
+              presentation: "formSheet",
+              sheetGrabberVisible: true,
+              sheetAllowedDetents: [0.95],
+              contentStyle: { backgroundColor: "#111111" },
             }}
           />
           <Stack.Screen

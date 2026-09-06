@@ -9,3 +9,18 @@ export interface SavedQRCode {
   url: string;
   timestamp: string;
 }
+
+export type URLTokenKind =
+  | "scheme"
+  | "punct"
+  | "host"
+  | "path"
+  | "key"
+  | "value"
+  | "fragment"
+  | "text";
+
+export interface URLToken {
+  text: string;
+  kind: URLTokenKind;
+}

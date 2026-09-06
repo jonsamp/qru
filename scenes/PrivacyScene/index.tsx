@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { useObserve } from "expo-observe";
 
 function SectionTitle({ children }: { children: string }) {
@@ -48,6 +50,7 @@ function Bullet({ children }: { children: string }) {
 }
 
 export default function PrivacyScene() {
+  const router = useRouter();
   const { markInteractive } = useObserve();
 
   useEffect(() => {
@@ -56,13 +59,36 @@ export default function PrivacyScene() {
 
   return (
     <View className="flex-1 bg-black">
+      <View className="pt-safe">
+        <View className="px-6 py-4 flex-row items-center">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="z-10 items-center"
+            accessibilityRole="button"
+            accessibilityLabel="Back"
+            hitSlop={12}
+          >
+            <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+            <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
+              Back
+            </Text>
+          </TouchableOpacity>
+          <View className="flex-1 items-center">
+            <Text className="text-white font-[JetBrainsMonoNL-Bold] text-lg">
+              PRIVACY
+            </Text>
+          </View>
+          <View style={{ width: 36 }} />
+        </View>
+      </View>
       <ScrollView className="flex-1">
         <View
           style={{
             maxWidth: 1100,
             width: "100%",
             alignSelf: "center",
-            padding: 32,
+            paddingHorizontal: 32,
+            paddingBottom: 32,
           }}
         >
           <Text

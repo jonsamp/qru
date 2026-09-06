@@ -8,12 +8,10 @@ import {
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Image } from "expo-image";
+import { Ionicons } from "@expo/vector-icons";
+import Constants from "expo-constants";
 import * as Updates from "expo-updates";
 import { useObserve } from "expo-observe";
-
-const backIcon =
-  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAgMTFINy44M0wxMy40MiA1LjQxTDEyIDRMNCAxMkwxMiAyMEwxMy40MSAxOC41OUw3LjgzIDEzSDIwVjExWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=";
 
 export default function AboutScene() {
   const router = useRouter();
@@ -32,20 +30,12 @@ export default function AboutScene() {
           </Text>
           <TouchableOpacity
             onPress={() => router.back()}
-            className="z-10 items-center"
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Close"
+            hitSlop={12}
           >
-            <Image
-              source={backIcon}
-              style={{
-                width: 20,
-                height: 20,
-                transform: [{ rotate: "-90deg" }],
-              }}
-              contentFit="contain"
-            />
-            <Text className="text-gray-300 font-[JetBrainsMonoNL-Regular] text-sm">
-              Dismiss
-            </Text>
+            <Ionicons name="close" size={24} color="#FFF" />
           </TouchableOpacity>
         </View>
       </View>
@@ -77,7 +67,10 @@ export default function AboutScene() {
         </View>
         <View className="px-6">
           <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
-            App Version: {Updates.runtimeVersion}
+            App Version: {Constants.expoConfig?.version ?? "Unknown"}
+          </Text>
+          <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
+            Runtime Version: {Updates.runtimeVersion ?? "Unknown"}
           </Text>
           <Text className="text-white font-[JetBrainsMonoNL-Regular] text-base">
             Update ID: {Updates.updateId ?? "Embedded"}

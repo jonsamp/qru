@@ -25,6 +25,15 @@ const config: ExpoConfig = {
       "android.permission.CAMERA",
       "android.permission.RECORD_AUDIO",
     ],
+    blockedPermissions: [
+      "android.permission.READ_MEDIA_IMAGES",
+      "android.permission.READ_MEDIA_VIDEO",
+      "android.permission.READ_MEDIA_AUDIO",
+      "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "android.permission.WRITE_SETTINGS",
+    ],
     package: `com.jonsamp.qru${isProduction ? "" : "_dev"}`,
     icon: isProduction
       ? "./assets/images/icon.png"
@@ -57,6 +66,23 @@ const config: ExpoConfig = {
       "expo-camera",
       {
         cameraPermission: "The camera will be used to scan QR codes.",
+      },
+    ],
+    "expo-sharing",
+    "expo-sqlite",
+    [
+      "expo-image-picker",
+      {
+        photosPermission:
+          "Your photo library is used to pick an image and scan the QR code inside it.",
+      },
+    ],
+    [
+      "expo-media-library",
+      {
+        savePhotosPermission:
+          "Your photo library is used to save generated QR codes.",
+        isAccessMediaLocationEnabled: false,
       },
     ],
     [
