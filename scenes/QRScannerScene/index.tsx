@@ -10,6 +10,7 @@ import { logEvent } from "../../utils/analytics";
 import { parseCustomURL } from "../../utils/urlParser";
 import { saveURL } from "../../utils/storage";
 import { ScanReticle } from "../../components/ScanReticle";
+import { ReadyToScan } from "./ReadyToScan";
 import { ToastProvider, useToast } from "../../components/Toast";
 import { Image } from "expo-image";
 
@@ -166,6 +167,7 @@ function Scanner() {
               </Text>
             </TouchableOpacity>
           </View>
+          <ReadyToScan />
           <View className="flex-1 items-end">
             <TouchableOpacity
               className="px-4 py-1.5 items-center justify-center"
@@ -193,7 +195,7 @@ function Scanner() {
           barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
           onBarcodeScanned={isFocused ? handleBarcodeScanned : undefined}
         />
-        <ScanReticle active={isFocused} />
+        <ScanReticle />
         <View className="absolute left-0 right-0 bottom-0 px-6 pb-safe">
           <View className="flex-row gap-3 mb-6">
             <CameraControl

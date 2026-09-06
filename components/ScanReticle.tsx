@@ -1,12 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from "react-native-reanimated";
 
 const ARM = 26;
 const STROKE = 2;
@@ -17,26 +10,9 @@ const CORNERS = [
   { bottom: 0, right: 0, borderBottomWidth: STROKE, borderRightWidth: STROKE },
 ];
 
-export function ScanReticle({ active = true }: { active?: boolean }) {
+export function ScanReticle() {
   const { width } = useWindowDimensions();
   const size = Math.min(Math.round(width * 0.68), 300);
-  const progress = useSharedValue(0);
-
-  useEffect(() => {
-    if (!active) {
-      progress.value = 0;
-      return;
-    }
-    progress.value = withRepeat(
-      withTiming(1, { duration: 2200, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true
-    );
-  }, [active, progress]);
-
-  const scanLineStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: progress.value * (size - STROKE) }],
-  }));
 
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="none">
@@ -51,12 +27,6 @@ export function ScanReticle({ active = true }: { active?: boolean }) {
               className="border-white"
             />
           ))}
-          {active && (
-            <Animated.View
-              style={[styles.scanLine, scanLineStyle]}
-              className="bg-[#A3E635]"
-            />
-          )}
         </View>
         <View style={[{ flex: 1 }, styles.mask]} />
       </View>
@@ -73,12 +43,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: ARM,
     height: ARM,
-  },
-  scanLine: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    height: STROKE,
-    opacity: 0.9,
   },
 });
