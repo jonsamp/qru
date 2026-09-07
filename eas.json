@@ -9,10 +9,7 @@
       "distribution": "internal"
     },
     "development-tf": {
-      "developmentClient": true,
-      "env": {
-        "EAS_BUILD_PROFILE": "development"
-      }
+      "developmentClient": true
     },
     "development-simulator": {
       "developmentClient": true,

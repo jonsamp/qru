@@ -1,10 +1,10 @@
 import { ExpoConfig } from "expo/config";
 
-const isProduction = process.env.EAS_BUILD_PROFILE === "production";
+const isProduction = process.env.APP_VARIANT === "production";
 
 const config: ExpoConfig = {
   version: process.env.APP_VERSION || "2026.0",
-  name: "QRU?",
+  name: isProduction ? "QRU?" : "QRU? (Dev)",
   slug: "qru",
   orientation: "portrait",
   platforms: ["ios", "android", "web"],
