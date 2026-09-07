@@ -14,6 +14,9 @@ const config: ExpoConfig = {
   scheme: "qru",
   userInterfaceStyle: "automatic",
   ios: {
+    icon: isProduction
+      ? "./assets/images/qru.icon"
+      : "./assets/images/qru-dev.icon",
     supportsTablet: true,
     bundleIdentifier: `com.jonsamp.qru${isProduction ? "" : "-dev"}`,
     infoPlist: {
