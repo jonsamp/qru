@@ -41,3 +41,6 @@ app-example
 .cursor/mcp.json
 
 .env.eas-simulator
+
+# Release smoke test screenshots
+/artifacts/release-smoke/
