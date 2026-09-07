@@ -15,8 +15,8 @@ const config: ExpoConfig = {
   userInterfaceStyle: "automatic",
   ios: {
     icon: isProduction
-      ? "./assets/images/qru.icon"
-      : "./assets/images/qru-dev.icon",
+      ? "./assets/icons/qru.icon"
+      : "./assets/icons/qru-dev.icon",
     supportsTablet: true,
     bundleIdentifier: `com.jonsamp.qru${isProduction ? "" : "-dev"}`,
     infoPlist: {
@@ -46,6 +46,9 @@ const config: ExpoConfig = {
         ? "./assets/images/adaptive-foreground.png"
         : "./assets/images/adaptive-foreground-dev.png",
       backgroundImage: "./assets/images/adaptive-background.png",
+      monochromeImage: isProduction
+        ? "./assets/images/adaptive-monochrome.png"
+        : "./assets/images/adaptive-monochrome-dev.png",
     },
   },
   web: {
